@@ -56,7 +56,7 @@
       ['MacroDisabledText', 'MacroBlocker'].forEach(function (n) { if (s.byName[n]) s.byName[n][0].style.display = 'none'; });
     },
     2: function (s) {
-      var b = s.byName.GamesByTimButton; if (b) { PPT.setText(b[0], 'Games by Tim'); noLink(b[0]); link(b[0], 25); }
+      var b = s.byName.GamesByTimButton; if (b) { b[0].style.display = 'none'; } /* board credit removed; credits page still lists Tim */
     },
     11: function (s) {
       T(s, 'TextBox 125', ['Click a sound effect box to preview its sound.', 'You can also replace any sound with your own audio file (including the two music slots below).']);

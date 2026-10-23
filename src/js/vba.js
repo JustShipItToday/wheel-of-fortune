@@ -1154,7 +1154,7 @@
   M.toggleGamesByTimAttribution = function (el) {
     var oSh = PPT.wrap(el); toggleOnOff(oSh);
     var off = oSh.Text === 'off';
-    S(2, 'GamesByTimButton').Visible = !off;
+    /* board credit button removed; toggle no longer shows it */
     var pos = off ? { TopRightBG: 536.4376, BonusLetters: 368.158, ResetBonus: 446.6068, HelpBonus: 448.1335, RSTLNE: 270.143, BonusOutline: 396, RSTLNEOutline: 295.2, BonusBox: 396, RSTLNEBox: 295.2 }
       : { TopRightBG: 457.9191, BonusLetters: 350.0474, ResetBonus: 428.4962, HelpBonus: 430.0229, RSTLNE: 252.0324, BonusOutline: 377.8894, RSTLNEOutline: 277.0894, BonusBox: 377.8894, RSTLNEBox: 277.0894 };
     Object.keys(pos).forEach(function (k) { S(2, k).Left = pos[k]; });
