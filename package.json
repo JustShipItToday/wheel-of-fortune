@@ -1,0 +1,10 @@
+{
+  "name": "wheel-of-fortune-web-edition",
+  "version": "1.0.0",
+  "description": "A free browser version of the Wheel of Fortune classroom game, based on Wheel of Fortune for PowerPoint by Games by Tim.",
+  "author": "Avi Lindenboim",
+  "license": "CC-BY-NC-SA-4.0",
+  "private": true,
+  "scripts": { "build": "python3 build.py", "test": "node tests/core.test.js" },
+  "devDependencies": { "playwright-core": "^1.50.0" }
+}
