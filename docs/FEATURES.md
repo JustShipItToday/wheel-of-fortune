@@ -12,7 +12,7 @@
 - **Puzzle swap** to exchange two puzzle numbers.
 - **Sound effects**, with a **Sound Effect Settings** screen where you can preview each sound or replace it with your own audio file.
 - **Backdrops** and **color schemes** for the board and wheel; you can click the board's right light pillar or the frame to change them quickly.
-- **Spanish Ñ** option, editable **game name**, and a Games by Tim attribution toggle.
+- **Spanish Ñ** option and an editable **game name**.
 - **Wheel Settings:** value range, number of Bankrupts per round, Free Play, Wild Card, Gift Tag, $5,000 Sliver, $5 Wedge.
 - **Manual wheel value:** click the Value Panel to set the spun value yourself (for a real wheel).
 

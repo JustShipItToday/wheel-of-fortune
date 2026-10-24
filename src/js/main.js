@@ -56,7 +56,7 @@
       ['MacroDisabledText', 'MacroBlocker'].forEach(function (n) { if (s.byName[n]) s.byName[n][0].style.display = 'none'; });
     },
     2: function (s) {
-      var b = s.byName.GamesByTimButton; if (b) { b[0].style.display = 'none'; } if (window.VBA && VBA.compactTopRight) { try { VBA.compactTopRight(); } catch (e) { setTimeout(function () { VBA.compactTopRight(); }, 0); } } /* board credit removed; credits page still lists Tim */
+      if (window.VBA && VBA.compactTopRight) { try { VBA.compactTopRight(); } catch (e) { setTimeout(function () { VBA.compactTopRight(); }, 0); } }
     },
     11: function (s) {
       T(s, 'TextBox 125', ['Click a sound effect box to preview its sound.', 'You can also replace any sound with your own audio file (including the two music slots below).']);

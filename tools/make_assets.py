@@ -90,6 +90,15 @@ def set_text(sid, name, lines):
     al = o['t'][0]['al']
     o['t'] = [{'al': al, 'r': [dict(first, t=ln)]} for ln in ([lines] if isinstance(lines, str) else lines)]
 
+def retire(sid, name, method=None):
+    # hide a shape but keep its slot, so saved games (which record shapes by position) still line up
+    for o in slides[sid]:
+        if o['n'] == name and (method is None or o.get('m') == method):
+            o['hid'] = 1
+            for k in ('m', 'u', 'j'): o.pop(k, None)
+            for p in o.get('t', []):
+                for r in p.get('r', []): r['t'] = ''
+
 def drop(sid, *names):
     slides[sid] = [o for o in slides[sid] if o['n'] not in names]
 
@@ -97,10 +106,11 @@ slides.pop('26', None)                                   # the original's "Impor
 drop('1', 'MacroDisabledText', 'MacroBlocker')           # "Macros/active content are disabled" warning
 drop('19', 'TextBox 13')                                 # "Before you start your game..." banner
 drop('25', 'TextBox 1')                                  # the "Important Notice" button
+retire('2', 'GamesByTimButton')
+retire('9', 'TextBox 127'); retire('9', 'GamesByTimAttribution'); retire('9', 'Help', 'ExplainGamesByTimAttribution')
 set_text('1', 'TextBox 29', 'Web Edition')
 set_text('1', 'TextBox 32', 'Web Edition by Avi Lindenboim')
 set_text('1', 'TextBox 33', 'Based on © Games by Tim  ~  Credits')
-set_text('2', 'GamesByTimButton', 'Games by Tim')
 set_text('18', 'TextBox 11', ['Thank you for using', 'Wheel of Fortune Web Edition'])
 set_text('18', 'TextBox 12', 'Your game saves automatically in this browser.')
 set_text('24', 'TextBox 6', 'Use an up-to-date Chrome, Edge, Firefox or Safari.')

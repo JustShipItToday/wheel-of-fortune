@@ -9,7 +9,6 @@ Open **Settings** from the title screen's Set Up Puzzles page or from the top ri
 | **Backdrop** | The scenery behind the board and wheel. You can also click the board's right light pillar to change it. | studio |
 | **Color Scheme** | The color of the board frame, wheel trim and category box (blue, gold, silver). You can also click the board frame. | blue |
 | **Blue Tiles** | When a letter is correct, tiles light up blue and each is clicked to reveal. Off shows letters instantly. | on |
-| **Games by Tim Attribution** | Shows or hides the "Games by Tim" credit on the board. Clicking it opens the credits. | on |
 
 ## Gameplay
 | Setting | What it does | Default |

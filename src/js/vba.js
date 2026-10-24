@@ -1086,7 +1086,6 @@
     ExplainGiftTag: ['Choose whether to use the Gift Tag item on the wheel (retired in 2023 on the actual show). The default is off.\n\nThe Gift Tag is an auxiliary item that gives the player a prize of your choice.', 'Gift Tag Setting'],
     Explain5Wedge: ['Optionally place a $5 wedge on the wheel (does not exist in the actual show). The default is off.', '$5 Wedge Setting'],
     ExplainPuzzleBoardTrim: ['Choose the color scheme of puzzle board elements, like the puzzle board frame, wheel trim, and category box.\n\nProtip: You can also change the color scheme in the puzzle board by clicking the puzzle board frame.', 'Color Scheme Setting'],
-    ExplainGamesByTimAttribution: ['Choose whether to show "Games by Tim" (the original creator) on the puzzle board. Clicking it opens the credits.', 'Games by Tim Attribution Setting'],
     ExplainSpecialScoreBonuses: ['Choose whether to activate the following score bonuses from the actual show:\n\n- Calling the same letter in a Same Letter puzzle awards the player an additional $1,000.\n- Solving all three Triple Toss-Ups augments that player\'s Triple Toss-Up winnings to 5x the Triple Toss-Up value (ex: $10,000 if each Toss-Up is worth $2,000).\n\nTo reduce confusion for new hosts, the default is off.', 'Special Score Bonuses Setting'],
     ExplainSolveButton: ['Choose what happens when you press the Solve button:\n\n- reveal - Reveal the puzzle.\n- verify - An input box appears to verify the player\'s solution. Useful for games when the host does not know the puzzles.\n\nThe default is reveal.', 'Solve Button Setting']
   };
@@ -1151,20 +1150,13 @@
     S(2, 'ShotClockBaseNumber').FillRGB = rgbA(t.sc);
   };
 
-  /* the board credit button is gone, so the gray top-right box always uses the original's compact "attribution off" layout */
+  /* the gray top-right box on the puzzle board uses the compact layout */
   var COMPACT_TOP_RIGHT = { TopRightBG: 536.4376, BonusLetters: 368.158, ResetBonus: 446.6068, HelpBonus: 448.1335, RSTLNE: 270.143, BonusOutline: 396, RSTLNEOutline: 295.2, BonusBox: 396, RSTLNEBox: 295.2 };
   function compactTopRight() {
     Object.keys(COMPACT_TOP_RIGHT).forEach(function (k) { S(2, k).Left = COMPACT_TOP_RIGHT[k]; });
     S(2, 'TopRightBG').Width = 171.0907;
   }
   window.VBA.compactTopRight = compactTopRight;
-
-  M.toggleGamesByTimAttribution = function (el) {
-    var oSh = PPT.wrap(el); toggleOnOff(oSh);
-    var off = oSh.Text === 'off';
-    /* board credit button removed; toggle no longer shows it */
-    compactTopRight();
-  };
 
   M.startBonusCountdownMusic = function () {
     var s = S(2, 'StartedSpecialMusic');
