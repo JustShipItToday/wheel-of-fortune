@@ -27,7 +27,7 @@ A step-by-step guide to running a game, including what to say as the host. For t
    - If it is in the puzzle, matching tiles light up blue. **Click each blue tile** to reveal its letter (or turn off Blue Tiles in Settings so they appear at once).
    - Then **click the player's round score** to add the spun value times the number of matches.
    - If it is not in the puzzle, a buzzer plays and the turn passes.
-5. **Buying a vowel.** Click the small **orange circle** to the left of that player's round score (it takes the vowel price off, $250 by default), then click the vowel. A player needs at least the vowel price to buy.
+5. **Buying a vowel.** Click the small **orange circle** to the left of that player's round score (it takes the vowel price off, $250 by default), then click the vowel. A player needs at least the vowel price to buy. The game follows the show's letter rules (for example, one consonant per spin, and no vowel until it's bought); see [Letter rules](FEATURES.md#letter-rules).
 6. **Special wedges.** Bankrupt, Lose a Turn, Free Play, Wild Card, Gift Tag, Mystery, Express and the Million Dollar Wedge each have their own behavior; see [Game Modes](MODES.md).
 7. **Solving.** Click the left tab, which now says **Solve**.
    - With the Solve Button set to **reveal** (default) the puzzle reveals at once and you decide whether the answer was right.

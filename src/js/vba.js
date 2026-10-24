@@ -161,9 +161,14 @@
     var VOWELCOST = CLng(S(9, 'VowelPrice').Text.replace('$', ''));
     var i = playerIndex(el, ['BuyVowelButton']); if (!i) return;
     var RoundDollarAmount = S(2, 'Player' + i + 'RoundScore'), playerName = S(2, 'Player' + i + 'Name').Text;
+    var buyWhy = window.Rules ? Rules.buyBlockReason(i) : '';
+    if (buyWhy) { await MsgBox(buyWhy, playerName + ' Buy Vowel'); return; }
     if (!IsNumeric(RoundDollarAmount.Text)) await MsgBox('Please remove non-numeric characters from ' + playerName + "'s score before buying a vowel.", playerName + ' Buy Vowel');
     else if (CLng(RoundDollarAmount.Text) < VOWELCOST) await MsgBox(playerName + ' cannot buy a vowel. Vowels cost $' + FormatNumber(VOWELCOST) + '.', playerName + ' Buy Vowel');
-    else RoundDollarAmount.Text = FormatNumber(CLng(RoundDollarAmount.Text) - VOWELCOST);
+    else {
+      RoundDollarAmount.Text = FormatNumber(CLng(RoundDollarAmount.Text) - VOWELCOST);
+      if (window.Rules) Rules.onVowelBought(i);
+    }
   };
 
   M.PlayerTransferTotals = async function (el) {
@@ -502,6 +507,8 @@
     var letterCount = 0, vowelsRemaining = false, consonantsRemaining = false, gotSameLetter = false;
     var theLetter = L.Text;
     if (S(2, 'BonusOutline').LineTransparency === 0) {
+      var bonusWhy = window.Rules ? Rules.bonusBlockReason(theLetter) : '';
+      if (bonusWhy) return MsgBox(bonusWhy, 'Bonus Round Letters');
       if (S(2, 'BonusLetters').Text.length >= 5) {
         return MsgBox('The contestant can only choose four letters (or five if they have a Wild Card). Use the spiral arrow button to remove letters if necessary.', 'Add Bonus Round Letter Error');
       }
@@ -509,6 +516,7 @@
       L.Text = '';
       return;
     }
+    if (window.Rules && Rules.blockReason(theLetter)) return Rules.explain(theLetter, el);
     var blueTilesOff = S(9, 'BlueTiles').Text === 'off', firstTile = S(2, 'FirstPuzzleTileWithLetter').Text;
     for (var k = 1; k <= 52; k++) {
       var tile = S(2, 'PuzzleBoard' + k);
@@ -876,11 +884,13 @@
       if (b.LineTransparency === 1) {
         b.FillRGB = RGB(225, 129, 75); b.FillTransparency = 0; b.LineTransparency = 0;
         S(2, 'FinalSpinBanner').Visible = true; S(2, 'BlackCover').Visible = true; S(2, 'ManualFinalSpin').Visible = true;
+        if (window.Rules) Rules.reset();
         Play('FinalSpinAlert');
       } else disableFinalSpin();
     }
   };
   function disableFinalSpin() {
+    if (window.Rules) Rules.reset();
     var b = S(2, 'FinalSpinButton');
     b.FillRGB = RGB(166, 166, 166); b.FillTransparency = 0.5; b.LineTransparency = 1;
     S(2, 'BlackCover').Visible = false; S(2, 'FinalSpinBanner').Visible = false; S(2, 'ManualFinalSpin').Visible = false;
@@ -974,6 +984,7 @@
     if (CLng(sText) < 1) { await MsgBox('The wheel value must be greater than 0.', 'Manually Set Value Panel'); return; }
     S(2, 'SpunWheelValue').Text = String(CLng(sText));
     S(2, 'LetterSelectionOverlay2').Visible = false;
+    if (window.Rules) Rules.onManualValue();
     setValuePanelDisplay();
   }
 

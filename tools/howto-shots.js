@@ -30,11 +30,13 @@ const path = require('path');
   await p.evaluate(async () => {
     await VBA.loadPuzzle(1, 0);
     const S = PPT.sh, guess = (i) => App.M.guessLetter(App.slide(2).byName['Letter' + i][0]);
+    const rulesCheck = Rules.blockReason; Rules.blockReason = () => '';   // staging a screenshot, not playing a turn
     [5, 23, 8, 15, 18, 20, 4, 1, 13, 7, 22].forEach(guess);
     // reveal all blue tiles, then light up the F tiles
     for (let k = 1; k <= 52; k++) { const t = S(2, 'PuzzleBoard' + k); if (t.FillRGB === '#0000FF') { t.Text = S(2, 'PuzzleCache' + k).Text; t.FillRGB = '#FFFFFF'; } }
     S(2, 'SpunWheelValue').Text = '650';
     guess(6);
+    Rules.blockReason = rulesCheck;
     S(2, 'Player1RoundScore').Text = '1,000'; S(2, 'Player2RoundScore').Text = '950'; S(2, 'Player3RoundScore').Text = '600';
   });
   await shot(22);

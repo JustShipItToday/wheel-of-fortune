@@ -101,6 +101,7 @@
     add.push(txt(clone(2, 'CategoryBox', { n: 'XPrizeRibbon', x: 664, y: 389, w: 165, h: 29, hid: 1, f: { g: [[0, '#F9E27B', 1], [0.5, '#E2A92B', 1], [1, '#F9E27B', 1]], ang: 90, path: 0 }, l: { w: 1.5, c: '#7A4E00' } }), 'PRIZE PUZZLE', 14));
     add.push(txt(clone(9, 'TextBox 173', { n: 'XBonusWheelLink', x: 760, y: 52, w: 170, h: 30, j: 41, hid: 1, f: { c: '#E9A27B' }, gl: [5, '#FFD700', 0.4] }), 'Bonus Wheel'));
     add.push(hiddenText('XActivePlayer', '1'), hiddenText('XLastLanded', ''), hiddenText('XPrizeActive', ''));
+    add.push(hiddenText('XLetterRule', ''), hiddenText('XVowelPaid', ''));   // letter rules state (see Rules below)
     L['2'] = L['2'].concat(add);
     // Million Dollar Wedge item on the Normal, Mystery and Express wheels (hidden until switched on)
     [3, 4, 5].forEach(function (n) {
@@ -133,7 +134,7 @@
       S(2, 'Player' + i + 'MDW').Visible = mdwOn();
     }
   }
-  function setTurn(i) { S(2, 'XActivePlayer').Text = String(i); paintTurn(); App.changed(); }
+  function setTurn(i) { if (String(i) !== S(2, 'XActivePlayer').Text) Rules.reset(); S(2, 'XActivePlayer').Text = String(i); paintTurn(); App.changed(); }
   function nextTurn(reason) {
     if (!on('XTurnTracker')) return;
     var n = numPlayers(), a = active() % n + 1;
@@ -337,6 +338,119 @@
   };
   Object.keys(EXPLAIN).forEach(function (k) { App.M[k] = function () { return Dlg.msg(EXPLAIN[k][0], EXPLAIN[k][1]); }; });
 
+
+  /* ---------- letter rules (the show's rules for calling letters) ----------
+     XLetterRule holds what the player may do next in a regular round:
+       ''            nothing pending: they must spin first, buy a vowel, or solve
+       'spin'        landed on a value: call exactly one consonant (no vowel yet)
+       'free'        landed on Free Play: one consonant, or one vowel for free
+       'express'     landed on Express: call a consonant
+       'expressRide' on the Express: keep calling consonants without spinning, buy vowels; ends on a miss
+       'wild'        using the Wild Card: one more consonant at the last spin's value
+     XVowelPaid is '1' after the orange buy-a-vowel circle was clicked and the vowel hasn't been called yet. */
+  var Rules = (function () {
+    function st() { return S(2, 'XLetterRule').Text; }
+    function set(v) { S(2, 'XLetterRule').Text = v; }
+    function paid() { return S(2, 'XVowelPaid').Text === '1'; }
+    function setPaid(v) { S(2, 'XVowelPaid').Text = v ? '1' : ''; }
+    function puzzleInPlay() { var t = S(2, 'LeftTab').Text; return t !== 'Load Puzzle' && t !== 'Load Next'; }
+    function isVowel(l) { return WOFCore.isVowel(l); }
+    function vowelPrice() { return S(9, 'VowelPrice').Text; }
+    function spunValue() { return S(2, 'SpunWheelValue').Text; }
+    function holdsWild(i) { try { return S(2, 'Player' + i + 'WildCard').FillTransparency === 0; } catch (e) { return false; } }
+    function wildHolders() { var out = []; for (var i = 1; i <= numPlayers(); i++) if (holdsWild(i)) out.push(i); return out; }
+    function bonusEntry() { return S(2, 'BonusOutline').LineTransparency === 0; }
+    function exempt() { return !puzzleInPlay() || inTossUp(); }
+
+    /* why a letter can't be called right now ('' = it can) */
+    function blockReason(l) {
+      if (exempt() || bonusEntry()) return '';
+      var r = st();
+      if (finalSpinOn()) {
+        if (!isVowel(l) && spunValue() === '') return 'Spin the wheel for the Final Spin before calling a consonant.';
+        return '';
+      }
+      if (isVowel(l)) {
+        if (r === 'free') return '';
+        if (r === 'spin' || r === 'express') return 'The wheel was just spun, so a consonant has to be called first. A vowel can be bought before spinning or after the consonant.';
+        if (r === 'wild') return 'The Wild Card is being used, so call a consonant.';
+        if (!paid()) return 'Buy the vowel first: click the orange circle next to the player’s round score (vowels cost ' + vowelPrice() + ').';
+        return '';
+      }
+      if (r === 'spin' || r === 'free' || r === 'express' || r === 'expressRide' || r === 'wild') {
+        if (paid()) return 'A vowel was bought, so call a vowel now.';
+        return '';
+      }
+      if (paid()) return 'A vowel was bought, so call a vowel now.';
+      return 'Spin first! A consonant can only be called after a spin.';
+    }
+
+    /* the Wild Card lets a player call one more consonant at their last spin's value */
+    function wildCandidates() {
+      if (st() !== '' || paid() || finalSpinOn() || spunValue() === '') return [];
+      var h = wildHolders();
+      if (on('XTurnTracker')) return holdsWild(active()) ? [active()] : [];
+      return h;
+    }
+
+    async function explain(l, el) {
+      var why = blockReason(l), cands = WOFCore.isVowel(l) ? [] : wildCandidates();
+      if (!cands.length) { await Dlg.msg(why, 'Can’t Call ' + l + ' Yet'); return; }
+      var labels = cands.map(function (i) { return 'Use ' + name(i) + '’s Wild Card'; }).concat(['Cancel']);
+      var pick = await Dlg.choose(why + '\n\n' + (cands.length === 1 ? name(cands[0]) + ' has' : 'These players have') + ' the Wild Card, which lets them call one more consonant at the last spin’s value ($' + WOFCore.fmt(+spunValue()) + ').', 'Can’t Call ' + l + ' Yet', labels);
+      if (pick < 0 || pick >= cands.length) return;
+      S(2, 'Player' + cands[pick] + 'WildCard').FillTransparency = 1;   // the card is used up
+      set('wild');
+      VBA.guessLetter(el);
+    }
+
+    /* bonus round: three consonants (four with the Wild Card) and one vowel */
+    function bonusBlockReason(l) {
+      var picked = S(2, 'BonusLetters').Text, v = 0, c = 0;
+      for (var k = 0; k < picked.length; k++) { if (isVowel(picked.charAt(k))) v++; else c++; }
+      if (isVowel(l)) return v >= 1 ? 'The contestant only gets one vowel in the Bonus Round.' : '';
+      var maxC = wildHolders().length ? 4 : 3;
+      if (c >= maxC) return maxC === 4 ? 'The contestant only gets four consonants in the Bonus Round (three, plus one for the Wild Card).' : 'The contestant only gets three consonants in the Bonus Round (four if they have the Wild Card).';
+      return '';
+    }
+
+    return {
+      reset: function () { try { set(''); setPaid(false); } catch (e) { } },
+      blockReason: blockReason,
+      bonusBlockReason: bonusBlockReason,
+      explain: explain,
+      onLanded: function (landed) {
+        setPaid(false);
+        if (landed === 'Bankrupt' || landed === 'Lose a Turn') set('');
+        else if (landed === 'Express') set('express');
+        else if (landed === 'Free Play') set('free');
+        else set('spin');
+      },
+      onManualValue: function () { if (!finalSpinOn()) { set('spin'); setPaid(false); } },
+      onLetter: function (l, count) {
+        if (exempt() || finalSpinOn()) return;
+        var r = st();
+        if (isVowel(l)) setPaid(false);
+        if (count === 0) { set(''); return; }
+        if (r === 'express' && !isVowel(l)) set('expressRide');
+        else if (r === 'expressRide') set('expressRide');
+        else set('');
+      },
+      /* buying a vowel: only when a vowel may be called next */
+      buyBlockReason: function (i) {
+        if (exempt() || bonusEntry()) return '';
+        if (finalSpinOn()) return 'Vowels are free during the Final Spin, so there’s nothing to buy. Just call the vowel.';
+        var r = st();
+        if (r === 'spin' || r === 'express' || r === 'free' || r === 'wild') return 'The wheel was just spun, so ' + (r === 'free' ? 'a letter' : 'a consonant') + ' has to be called first.' + (r === 'free' ? ' On Free Play the vowel is free anyway.' : '');
+        if (paid()) return 'A vowel was already bought. Call it before buying another.';
+        if (on('XTurnTracker') && i !== active()) return 'It’s ' + name(active()) + '’s turn, so only they can buy a vowel.';
+        return '';
+      },
+      onVowelBought: function () { setPaid(true); }
+    };
+  })();
+  window.Rules = Rules;
+
   /* ---------- hooks called from the port ---------- */
   var lastLanded = '';
   var Extras = {
@@ -349,13 +463,15 @@
     onShow: function (id) { if (id === 2) { paintTurn(); syncBonusLink(); } if (id === 41) WOFWheel.redraw(App.slide(41).el); },
     save: function () { return null; },
     load: function () {},
-    onClearBoard: function () { S(2, 'XPrizeActive').Text = ''; S(2, 'XPrizeRibbon').Visible = false; },
+    onClearBoard: function () { Rules.reset(); S(2, 'XPrizeActive').Text = ''; S(2, 'XPrizeRibbon').Visible = false; },
     onPuzzleLoaded: function (i, isTossUp, opts) {
+      Rules.reset();
       var prize = !!(opts && opts.prize);
       S(2, 'XPrizeActive').Text = prize ? '1' : '';
       S(2, 'XPrizeRibbon').Visible = prize;
     },
     onSolved: function () {
+      Rules.reset();
       if (S(2, 'XPrizeActive').Text === '1') {
         S(2, 'XPrizeActive').Text = ''; S(2, 'XPrizeRibbon').Visible = false;
         setTimeout(function () { App.hold(); awardPrize().then(App.release, App.release); }, 350);
@@ -363,19 +479,20 @@
     },
     onWrongSolve: function () { if (!inTossUp()) nextTurn('Wrong solve'); },
     onLetter: function (letter, count) {
+      Rules.onLetter(letter, count);
       if (count > 0 || inTossUp()) return;
       if (lastLanded === 'Free Play') return;          // Free Play: the turn continues regardless
       nextTurn(letter + ' is not in the puzzle');
     },
     onScoreAdded: function () {},
     onShotClockExpired: function () { if (!inTossUp()) nextTurn("Time's up"); },
-    onLanded: function (landed) { lastLanded = landed; S(2, 'XLastLanded').Text = landed; },
+    onLanded: function (landed) { lastLanded = landed; S(2, 'XLastLanded').Text = landed; if (App.current !== 41) Rules.onLanded(landed); },
     afterSpin: async function (landed) {
       if (landed === 'Bankrupt' || landed === 'Lose a Turn') nextTurn(landed);
     },
     onPlayersChanged: function () { placePlayerExtras(); paintTurn(); },
-    onRoundChanged: function () { syncBonusLink(); },
-    onWipe: function () { S(2, 'XActivePlayer').Text = '1'; for (var i = 1; i <= 4; i++) S(2, 'Player' + i + 'MDW').FillTransparency = 1; if (mdwOn()) setMDWOnWheels(true); paintTurn(); },
+    onRoundChanged: function () { Rules.reset(); syncBonusLink(); },
+    onWipe: function () { Rules.reset(); S(2, 'XActivePlayer').Text = '1'; for (var i = 1; i <= 4; i++) S(2, 'Player' + i + 'MDW').FillTransparency = 1; if (mdwOn()) setMDWOnWheels(true); paintTurn(); },
     beforeLoadPrompt: async function () {
       if (bonusMode() && on('XPickCategory')) return pickCategoryFlow();
       return false;

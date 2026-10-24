@@ -22,6 +22,16 @@ These are on the **Extra Features** screen (open it from **Settings → Extra Fe
 ### Turn tracker
 A gold dot and highlighted name show whose turn it is. The turn passes automatically after a Bankrupt, a Lose a Turn, a letter that isn't in the puzzle, a wrong solve (in *verify* mode), or when the shot clock runs out. Click any player's dot to hand them the turn. **On by default.**
 
+### Letter rules
+The letter selector follows the show's rules, so a letter can't be called when the rules don't allow it. A message explains why. These rules are always on.
+- **Regular rounds:** a spin that lands on a value allows exactly one consonant. A vowel can't be called right after a spin; it has to be bought first with the orange circle next to the player's round score, and one purchase buys one vowel. Bankrupt and Lose a Turn allow no letters, and a letter that isn't in the puzzle ends the turn. Only the player whose turn it is can buy a vowel (with the turn tracker on). Setting the Value Panel by hand (for a real wheel) counts as a spin.
+- **Free Play:** one consonant, or one vowel for free.
+- **Wild Card:** when a second consonant is blocked and the player holds the Wild Card, the message offers to use it. The consonant is then called at the last spin's value, and the card is used up.
+- **Express:** after landing on Express, the first letter is a consonant. If it's in the puzzle, the player is on the Express: more consonants without spinning, and vowels can still be bought, until a miss.
+- **Final Spin:** vowels are free at any time; consonants need the Final Spin's one spin.
+- **Bonus Round:** three consonants (four with the Wild Card) and one vowel.
+- **Toss-Ups** are unchanged.
+
 ### Million Dollar Wedge
 Adds a sliver worth **ONE MILLION** between two Bankrupts to the Normal, Mystery and Express wheels. Landing in the middle is worth $500. Give the wedge to the player with the green token next to their name. If that player reaches the Bonus Round still holding it, the $100,000 envelope on the Bonus Wheel becomes **$1,000,000**. **Off by default.**
 

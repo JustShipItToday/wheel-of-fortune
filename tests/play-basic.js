@@ -16,12 +16,16 @@ module.exports = async function (t) {
   t.log('after F panel:', await t.text('ValuePanel', 2), 'counter', await t.text('LetterCounter', 2));
   await t.click('Player1RoundScoreCompatibility');
   t.log('P1 round:', await t.text('Player1RoundScore', 2));
+  await t.eval('App.show(3); Math.random = () => 375/3600'); await t.click('TransparentWheelOverlay', 3); await t.wait(3900); await t.eval('App.show(2)');   // the rules need a spin before each consonant
+  await t.eval("PPT.sh(2,'SpunWheelValue').Text='600'; VBA.setValuePanelDisplay()");
   await t.click('Letter18');                // R -> 1
   await t.click('Player1RoundScoreCompatibility');
   t.log('P1 round after R:', await t.text('Player1RoundScore', 2));
   await t.click('Player1BuyVowelButton');
   await t.click('Letter5');                 // E
   t.log('P1 after vowel:', await t.text('Player1RoundScore', 2));
+  await t.eval('App.show(3); Math.random = () => 375/3600'); await t.click('TransparentWheelOverlay', 3); await t.wait(3900); await t.eval('App.show(2)');   // the rules need a spin before each consonant
+  await t.eval("PPT.sh(2,'SpunWheelValue').Text='600'; VBA.setValuePanelDisplay()");
   await t.click('Letter26');                // Z wrong
   t.log('overlay2 visible:', await t.eval("PPT.sh(2,'LetterSelectionOverlay2').Visible"));
   await t.shot('letters');
