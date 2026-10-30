@@ -73,5 +73,6 @@ Click **End Game** (top right). You can **end the show**, **wipe all scores**, o
 - **Hosting over a video call?** Share the browser tab and use full screen.
 - **Using a real wheel?** Click the Value Panel to set the spun value by hand.
 - **Don't use the browser's Back button or reload** mid-game; use the on-screen buttons. (Autosave should recover a reload, but don't test it live.)
+- **Send your game to a friend:** **Share Game** on the Settings screen copies a link; see [Features](FEATURES.md#share-a-game-as-a-link).
 - **Move to another computer:** **⋯ → Save game file**, then **Load game file** on the other computer.
 - Keep a second copy of `index.html` on a flash drive in case the network is down.

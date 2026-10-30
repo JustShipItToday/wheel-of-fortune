@@ -134,12 +134,14 @@
     b.onclick = async function () {
       if (Dlg.isOpen() || App.busy) return;
       var fs = !!document.fullscreenElement;
-      var choices = [fs ? 'Exit full screen' : 'Full screen', WOFAudio.muted ? 'Sound on' : 'Sound off', 'Save game file', 'Load game file', 'Extra features', 'Close'];
+      var choices = [fs ? 'Exit full screen' : 'Full screen', WOFAudio.muted ? 'Sound on' : 'Sound off', 'Share game link', 'Save game file', 'Load game file'].concat(Persist.hasBackup() ? ['Switch to previous game'] : [], ['Extra features', 'Close']);
       var i = await Dlg.choose('Your game saves automatically in this browser. A game file lets you move it to another computer or keep a backup.', 'Menu', choices);
       var c = choices[i];
       if (c === 'Full screen') document.documentElement.requestFullscreen && document.documentElement.requestFullscreen().catch(function () { });
       else if (c === 'Exit full screen') document.exitFullscreen();
       else if (c === 'Sound on' || c === 'Sound off') { WOFAudio.setMuted(c === 'Sound off'); try { localStorage.setItem('wof-web-muted', c === 'Sound off' ? '1' : ''); } catch (e) { } }
+      else if (c === 'Share game link') Share.share();
+      else if (c === 'Switch to previous game') Share.switchBack();
       else if (c === 'Save game file') { Persist.save(); Persist.exportFile(); }
       else if (c === 'Load game file') {
         if (await Dlg.confirm('Loading a game file replaces the puzzles, scores and settings in this browser. Continue?', 'Load Game File', { defaultNo: true })) {
@@ -165,6 +167,7 @@
     App.show(1);
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { if (window.WOFFit) WOFFit.slide(App.current); });
     if (window.Extras && Extras.afterBoot) Extras.afterBoot();
+    Share.afterBoot();
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
   window.WOFMain = { setParas: setParas };

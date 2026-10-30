@@ -3,6 +3,12 @@
 ## Where is my game saved?
 Automatically, in the browser you are using on that computer. Use the same browser and the same address on game day. To move a game elsewhere, use **⋯ → Save game file**, then **Load game file** on the other computer. If you clear your browser's site data, the saved game is cleared too.
 
+## How do I share my game with someone?
+Open **Settings → Share Game** (or **⋯ → Share game link**), tick what to include, and click **Copy link**. Send the link by text, email or chat. Opening it asks them before anything changes, and they can switch back to their own game from the **⋯** menu.
+
+## My share link doesn't work.
+Some chat apps cut very long links. The Share window shows the link's length and warns when it is long; if a friend gets a "damaged or cut off" message, send the link another way (email works well) or use **Save game file** instead. Links also need a reasonably current browser (Chrome, Edge, Firefox or Safari from 2023 or later).
+
 ## My puzzles disappeared.
 You may be on a different browser, a private/incognito window, or a different address. Open the game where you set it up, or load a saved game file.
 

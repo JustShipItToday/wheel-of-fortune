@@ -45,6 +45,7 @@ Open **Settings** from the title screen's Set Up Puzzles page or from the top ri
 | **Pick-a-Category Bonus** | The contestant picks one of three categories before the Bonus Round. | on |
 | **Import Puzzles from Text** | Adds many puzzles at once. | |
 | **Save/Load game file** | Moves a game between computers. | |
+| **Share Game** | On the Settings screen: copies a link that opens your game for anyone, with optional scores and current puzzle. | |
 
 ## Players
 Use the **+ / −** buttons on the puzzle board to switch between 2, 3 and 4 players. Click a name to edit it.

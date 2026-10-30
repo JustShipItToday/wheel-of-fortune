@@ -7,7 +7,7 @@ def rd(p): return open(p, encoding='utf8').read()
 order = ['data/layout.js', 'data/sounds.js', 'data/images.js', 'js/render.js', 'js/dialog.js', 'js/app.js']
 extra = sorted(f for f in os.listdir(S('js')) if f.endswith('.js') and ('js/' + f) not in order)
 # explicit order for the rest
-rest = [f for f in ['core.js', 'fit.js', 'ppt.js', 'art.js', 'audio.js', 'wheel.js', 'anim.js', 'vba.js', 'persist.js', 'extras.js', 'main.js'] if f in extra]
+rest = [f for f in ['core.js', 'fit.js', 'ppt.js', 'art.js', 'audio.js', 'wheel.js', 'anim.js', 'vba.js', 'persist.js', 'extras.js', 'share.js', 'main.js'] if f in extra]
 rest += [f for f in extra if f not in rest]
 order = order + ['js/' + f for f in rest]
 js = '\n;\n'.join(rd(S(p)) for p in order)
