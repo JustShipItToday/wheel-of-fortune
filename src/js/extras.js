@@ -91,6 +91,7 @@
   function extendLayouts() {
     // Settings: a button to the Extra Features screen
     L['9'].push(txt(clone(9, 'TextBox 173', { n: 'XExtrasButton', x: 705, y: 112, w: 150, h: 30, j: 40, f: { c: '#F7D774', a: 0.85 } }), 'Extra Features'));
+    L['9'].push(txt(clone(9, 'TextBox 173', { n: 'XShareButton', x: 705, y: 456, w: 150, h: 30, m: 'XShare', f: { c: '#7FD6A8', a: 0.85 } }), 'Share Game'));
     // Puzzle board: turn dots, Million Dollar Wedge tokens, prize ribbon, bonus wheel link, hidden state
     var add = [];
     for (var i = 1; i <= 4; i++) {

@@ -4,7 +4,7 @@
    Saved to localStorage on every change; can also be exported/imported as a .json "game file". */
 (function () {
   'use strict';
-  var KEY = 'wof-web-v1', timer = null, restoring = false;
+  var KEY = 'wof-web-v1', BACKUP = 'wof-web-v1-backup', timer = null, restoring = false, frozen = false;
 
   function shapesOf(slideObj) { return slideObj.el.querySelectorAll('[data-name]'); }
   function snapshotInit(slideObj) {
@@ -12,12 +12,14 @@
       el._init = { t: PPT.getText(el), d: el.style.display || '' };
     });
   }
-  function collect() {
+  /* skip(slideId, el): optional, return true to leave a shape out (used by Share to leave out scores or the board) */
+  function collect(skip) {
     var out = { v: 1, pages: App.pageCount(), slides: {}, extras: window.Extras ? Extras.save() : null, at: Date.now() };
     App.built().sort(function (a, b) { return a - b; }).forEach(function (id) {
       var s = App.slide(id), recs = [];
       Array.prototype.forEach.call(shapesOf(s), function (el, i) {
         if (!el._init) return;
+        if (skip && skip(id, el)) return;
         var r = null, t = PPT.getText(el), d = el.style.display || '';
         function R() { return r || (r = { i: i }); }
         if (t !== el._init.t) R().t = t;
@@ -31,7 +33,7 @@
     return out;
   }
   function save() {
-    if (restoring) return;
+    if (restoring || frozen) return;
     try { localStorage.setItem(KEY, JSON.stringify(collect())); } catch (e) { console.warn('autosave failed', e); }
   }
   function touch() { clearTimeout(timer); timer = setTimeout(save, 300); }
@@ -59,6 +61,24 @@
     try { raw = localStorage.getItem(KEY); } catch (e) { }
     if (!raw) return false;
     try { apply(JSON.parse(raw)); return true; } catch (e) { console.warn('could not restore save', e); return false; }
+  }
+  /* take over this browser's save with another game (a shared link). The previous save is kept as a backup. */
+  function adopt(data) {
+    var prev = localStorage.getItem(KEY);
+    if (prev) localStorage.setItem(BACKUP, prev);
+    localStorage.setItem(KEY, JSON.stringify(data));
+    frozen = true;            // the page is about to reload; don't let the pending autosave overwrite it
+  }
+  function hasBackup() { try { return !!localStorage.getItem(BACKUP); } catch (e) { return false; } }
+  /* swap the current game with the backup (so you can go back and forth) */
+  function swapBackup() {
+    save();
+    var cur = localStorage.getItem(KEY), bak = localStorage.getItem(BACKUP);
+    if (!bak) return false;
+    localStorage.setItem(KEY, bak);
+    if (cur) localStorage.setItem(BACKUP, cur); else localStorage.removeItem(BACKUP);
+    frozen = true;
+    return true;
   }
   function clear() { try { localStorage.removeItem(KEY); } catch (e) { } }
 
@@ -90,5 +110,5 @@
     });
   }
 
-  window.Persist = { touch: touch, save: save, load: load, clear: clear, snapshotInit: snapshotInit, exportFile: exportFile, importFile: importFile, KEY: KEY, get restoring() { return restoring; } };
+  window.Persist = { touch: touch, save: save, load: load, clear: clear, snapshotInit: snapshotInit, exportFile: exportFile, importFile: importFile, collect: collect, adopt: adopt, hasBackup: hasBackup, swapBackup: swapBackup, KEY: KEY, get restoring() { return restoring; } };
 })();

@@ -14,6 +14,7 @@ Developed by **Avi Lindenboim**. Based on **Wheel of Fortune for PowerPoint** by
 - A redrawn wheel and logo, so the game is a close lookalike rather than a copy of any artwork.
 - **Extra features** added in this edition: a turn tracker, Million Dollar Wedge, a 24-envelope Bonus Wheel with editable prizes, Prize Puzzle, a pick-a-category Bonus Round, and puzzle import from text.
 - Autosave in your browser, plus save/load of a game file to move a game to another computer.
+- **Share a game as a link**: copy one link with your puzzles, settings and (optionally) scores and the current puzzle, and a friend can open, edit and re-share it. No server or account needed.
 
 ## Quick start
 
