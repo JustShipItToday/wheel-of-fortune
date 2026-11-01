@@ -43,6 +43,9 @@ Open **Settings** from the title screen's Set Up Puzzles page or from the top ri
 | **Million Dollar Wedge** | Adds the Million Dollar Wedge to the first three wheels. | off |
 | **Bonus Wheel** | The 24-envelope prize wheel; **Edit Bonus Prizes** changes the prizes. | on |
 | **Pick-a-Category Bonus** | The contestant picks one of three categories before the Bonus Round. | on |
+| **Sample Puzzles** | How many of the 100 built-in sample puzzles the game draws from when you type `S` at Load Puzzle (1–100), or 0/off to turn them off. | 100 |
+| **Add Sample Puzzles to My List** | Copies sample puzzles into your own list, after your last puzzle. | |
+| **Game Help** | Opens the in-game Help screen (also F1, or the ? on the puzzle board). | |
 | **Import Puzzles from Text** | Adds many puzzles at once. | |
 | **Save/Load game file** | Moves a game between computers. | |
 | **Share Game** | On the Settings screen: copies a link that opens your game for anyone, with optional scores and current puzzle. | |

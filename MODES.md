@@ -2,7 +2,7 @@
 
 Everything this game can do, mode by mode: what each one is, exactly which buttons to click, what to say out loud as the host, and the little gotchas that trip people up. Every mode here was checked against how the game actually behaves, so what you read is what you will see on screen.
 
-If you only want the quick reference, jump to the [cheat sheet](#-cheat-sheet). If you are brand new, read [The big picture](#-the-big-picture) first and then pick a mode.
+Every mode on this page also has its own page inside the game: click **Game Help**, the **?** on the puzzle board, or press **F1**. If you only want the quick reference, jump to the [cheat sheet](#-cheat-sheet). If you are brand new, read [The big picture](#-the-big-picture) first and then pick a mode.
 
 ## Contents
 
@@ -62,6 +62,9 @@ Click the blue **Load Puzzle** tab at the bottom left of the board. A box asks f
 | `3T` | Puzzle 3 as a **Toss-Up** |
 | `3TTT` | A **Triple Toss-Up** starting at puzzle 3 (it will use 3, 4 and 5) |
 | `3P` | Puzzle 3 as a **Prize Puzzle** |
+| `S` | A random **sample puzzle** (one of 100 built in) |
+| `S7` | Sample puzzle 7 |
+| `ST`, `STTT`, `SP` | Random sample puzzles as a Toss-Up, Triple Toss-Up or Prize Puzzle |
 
 The letters are not case sensitive, so `3t` works too. One combination is not supported: `P` together with `T`. If you type something the game cannot read, it asks again.
 

@@ -1,6 +1,6 @@
 # Game Modes
 
-The round button on the puzzle board (it starts as **Normal Round**) cycles through the wheels in this order: **Normal → Mystery → Express → Final Spin → Bonus Round → Normal**. Toss-Ups, Triple Toss-Ups and Prize Puzzles are chosen when you load a puzzle.
+The round button on the puzzle board (it starts as **Normal Round**) cycles through the wheels in this order: **Normal → Mystery → Express → Final Spin → Bonus Round → Normal**. Toss-Ups, Triple Toss-Ups and Prize Puzzles are chosen when you load a puzzle. Every code also works with the built-in sample puzzles: `S` (random), `S7`, `ST`, `STTT`, `SP`. Each mode below also has its own page in the in-game Help (F1).
 
 ## Normal Round
 The standard game. Spin the wheel, call a consonant, and score the spun value for each match; buy vowels; solve to win the round. Wedges on the normal wheel include dollar amounts, **Bankrupt**, and **Lose a Turn**. The range of dollar values is a setting (default $500–$900).

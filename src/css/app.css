@@ -45,3 +45,43 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:'Jo
 .x-ta{display:block;width:100%;font:14px/1.35 'Josefin Sans',Arial,sans-serif;padding:8px;border:2px solid #8984EC;border-radius:6px;resize:vertical;user-select:text;-webkit-user-select:text}
 
 .txt, .txt .para { overflow-wrap: anywhere; }
+
+/* ---- in-game Help screen (help.js) ---- */
+.x-help{position:absolute;inset:0;z-index:45;display:none;flex-direction:column;background:radial-gradient(circle at 30% 0%,#4B2A8C 0%,#1E1264 60%,#140B48 100%);color:#fff;font-family:'Josefin Sans','Century Gothic',Arial,sans-serif;-webkit-user-select:text;user-select:text}
+.x-help.open{display:flex}
+.xh-top{display:flex;align-items:center;gap:14px;padding:10px 16px;background:rgba(0,0,0,.25);border-bottom:2px solid rgba(255,215,0,.45)}
+.xh-title{font:700 24px 'Josefin Sans',sans-serif;color:#FFE27A;text-shadow:2px 2px 4px rgba(0,0,0,.5);white-space:nowrap}
+.xh-search{flex:1;max-width:340px;margin-left:auto;padding:7px 12px;border-radius:18px;border:2px solid #8984EC;background:#ECE9F6;color:#1b1450;font:15px 'Josefin Sans',Arial,sans-serif;outline:none}
+.xh-search:focus{border-color:#FFE27A}
+.xh-close{padding:7px 16px;border-radius:8px;border:2px solid #FFE27A;background:#FFE27A;color:#3a2a00;font:700 15px 'Josefin Sans',Arial,sans-serif;cursor:pointer}
+.xh-close:hover,.xh-close:focus-visible{filter:brightness(1.08);outline:2px solid #fff;outline-offset:2px}
+.xh-main{flex:1;display:flex;min-height:0}
+.xh-nav{width:232px;flex:none;overflow-y:auto;padding:8px 8px 16px;background:rgba(0,0,0,.22);border-right:1px solid rgba(255,255,255,.12)}
+.xh-gh{font:700 11px 'Josefin Sans',Arial,sans-serif;letter-spacing:1.2px;text-transform:uppercase;color:#B9B2F0;margin:12px 6px 4px}
+.xh-gh:first-child{margin-top:4px}
+.xh-item{display:flex;align-items:center;gap:8px;width:100%;text-align:left;padding:6px 8px;border:0;border-radius:7px;background:transparent;color:#fff;font:15px 'Josefin Sans',Arial,sans-serif;cursor:pointer}
+.xh-item:hover{background:rgba(255,255,255,.1)}
+.xh-item.on{background:#FFE27A;color:#2a1c00;font-weight:700}
+.xh-ii{width:20px;text-align:center;flex:none}
+.xh-none{padding:14px 8px;color:#ddd;font-size:14px}
+.xh-body{flex:1;overflow-y:auto;padding:18px 26px 28px;background:#ECE9F6;color:#1b1450;font-size:15px;line-height:1.45}
+.xh-hero{display:flex;align-items:center;gap:14px;margin-bottom:8px}
+.xh-icon{--chip:#6F67D7;width:54px;height:54px;flex:none;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.55),transparent 55%),var(--chip);border:3px solid #fff;box-shadow:0 3px 10px rgba(0,0,0,.35)}
+.xh-group{font:700 11px 'Josefin Sans',Arial,sans-serif;letter-spacing:1.2px;text-transform:uppercase;color:#6F67D7}
+.xh-body h2{font:700 28px 'Josefin Sans',Arial,sans-serif;color:#1E1264;line-height:1.1}
+.xh-body section{margin-top:14px;background:#fff;border:1px solid #D5D1EE;border-radius:10px;padding:10px 16px 12px}
+.xh-body h3{display:flex;align-items:center;gap:8px;font:700 16px 'Josefin Sans',Arial,sans-serif;color:#4A3FB5;margin-bottom:6px}
+.xh-body p+p{margin-top:6px}
+.xh-wheel{background:#F4F2FB;border-left:4px solid #6F67D7;padding:6px 10px;border-radius:4px}
+.xh-body ol,.xh-body ul{padding-left:22px}
+.xh-body li{margin:4px 0}
+.xh-body li::marker{color:#6F67D7;font-weight:700}
+.xh-body table{border-collapse:collapse;width:100%}
+.xh-body td{padding:5px 8px;border-bottom:1px solid #E4E1F4}
+.xh-body td:first-child{width:90px}
+.xh-body code{font:700 15px 'Courier New',monospace;background:#1E1264;color:#FFE27A;padding:2px 8px;border-radius:5px}
+.xh-body blockquote{margin:6px 0;padding:6px 12px;background:#FFF8DC;border-left:4px solid #E2A92B;border-radius:4px;font-style:italic}
+.xh-related{margin-top:16px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.xh-related span{font-weight:700;color:#4A3FB5}
+.xh-related button{padding:5px 12px;border-radius:16px;border:2px solid #8984EC;background:#fff;color:#1b1450;font:14px 'Josefin Sans',Arial,sans-serif;cursor:pointer}
+.xh-related button:hover{background:#FFE27A;border-color:#E2A92B}

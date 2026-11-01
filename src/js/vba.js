@@ -369,15 +369,21 @@
       var noPuzzlesExist = true;
       if (SlidesCount4() === 1) { for (var j = 1; j <= 12; j++) if (puzzleExists(j)) { noPuzzlesExist = false; break; } }
       else noPuzzlesExist = false;
-      if (noPuzzlesExist) {
+      var samplesOn = !!(window.Extras && Extras.samplesOn && Extras.samplesOn());
+      if (noPuzzlesExist && !samplesOn) {
         if (await YesNo('No puzzles were found in Set Up Puzzles. Would you like to load the example puzzle?\n\n(To set up puzzles, go to Settings on the top right of this slide and click the above puzzle numbers to edit.)', 'Load Puzzle')) await loadPuzzle(0, 0);
         return;
       }
       if (window.Extras && Extras.beforeLoadPrompt) { var handled = await Extras.beforeLoadPrompt(); if (handled) return; }
-      var numberToLoad = await InputBox('Enter the puzzle number to load (1, 2 etc).\n\nAppend T to to load the puzzle as a Toss-Up (1T, 2T, etc), TTT to start a Triple Toss-Up sequence (1TTT, 2TTT, etc), or P for a Prize Puzzle (1P, 2P, etc).', 'Load Puzzle', S(2, 'NextPuzzleToLoad').Text);
-      while (!IsNumeric(numberToLoad.toUpperCase().replace(/T/g, '').replace(/P$/, ''))) {
+      var loadPrompt = (noPuzzlesExist ? "You haven't set up any puzzles of your own yet, so S (a random sample puzzle) is filled in for you.\n\n" : '') +
+        'Enter the puzzle number to load (1, 2 etc).\n\nAppend T to load the puzzle as a Toss-Up (1T, 2T, etc), TTT to start a Triple Toss-Up sequence (1TTT, 2TTT, etc), or P for a Prize Puzzle (1P, 2P, etc).' +
+        (samplesOn ? '\n\nType S for a random sample puzzle (ST, STTT and SP work too), or S7 for sample puzzle 7.' : '');
+      var numberToLoad = await InputBox(loadPrompt, 'Load Puzzle', noPuzzlesExist ? 'S' : S(2, 'NextPuzzleToLoad').Text);
+      while (true) {
         if (numberToLoad === '') return;
-        numberToLoad = await InputBox('Please enter a number, a number with a T (Toss-Up), a number with a TTT (Triple Toss-Up), or a number with a P (Prize Puzzle):', 'Load Puzzle', numberToLoad);
+        if (window.Extras && Extras.trySampleCode && await Extras.trySampleCode(numberToLoad)) return;
+        if (IsNumeric(numberToLoad.toUpperCase().replace(/T/g, '').replace(/P$/, ''))) break;
+        numberToLoad = await InputBox('Please enter a number, a number with a T (Toss-Up), a number with a TTT (Triple Toss-Up), or a number with a P (Prize Puzzle)' + (samplesOn ? ', or S for a random sample puzzle' : '') + ':', 'Load Puzzle', numberToLoad);
       }
       var up = numberToLoad.toUpperCase().trim();
       if (/P$/.test(up) && up.indexOf('T') < 0) { await loadPuzzle(CInt(up.replace(/P$/, '')), 0, { prize: true }); return; }
@@ -386,6 +392,7 @@
       else if (up.indexOf('T') >= 0) await loadPuzzle(CInt(up.replace(/T/g, '')), 1);
       else await loadPuzzle(CInt(up), 0);
     } else if (tab === 'Load Next') {
+      if (window.Extras && Extras.loadNextSample && await Extras.loadNextSample()) return;
       await loadPuzzle(CInt(S(2, 'NextPuzzleToLoad').Text), 4);
     } else {
       var reset = !S(2, 'TossUpBanner').Visible;
@@ -407,13 +414,13 @@
   async function loadPuzzle(i, isTossUp, opts) {
     opts = opts || {};
     var SpanishNError = false, sText = '';
-    if (!puzzleExists(i) && i !== 0) { await MsgBox('No puzzle found for number ' + i + '.', 'Load Puzzle Error'); return false; }
+    if (!opts.sample && !puzzleExists(i) && i !== 0) { await MsgBox('No puzzle found for number ' + i + '.', 'Load Puzzle Error'); return false; }
     if (isTossUp === 1) {
       sText = await askTossUpValue('How much is the Toss-Up worth in dollars?', 'Set Toss-Up Value', '1000', 'The Toss-Up value must be greater than 0.', 'Set Toss-Up Value');
       if (sText === '') return false;
     }
     if (isTossUp === 3) {
-      if (!puzzleExists(i + 1) || !puzzleExists(i + 2)) {
+      if (!opts.sample && (!puzzleExists(i + 1) || !puzzleExists(i + 2))) {
         await MsgBox('Cannot start a Triple Toss-Up from puzzle ' + i + ' because puzzle ' + (i + 1) + ' and/or ' + (i + 2) + ' cannot be found.', 'Triple Toss-Up Error');
         return false;
       }
@@ -423,7 +430,17 @@
     if (isTossUp === 4) sText = String(CLng(S(2, 'SpunWheelValue').Text));
     ClearBoardButton();
     var m, j;
-    if (i === 0) {
+    if (opts.sample) {
+      for (j = 1; j <= 52; j++) {
+        var sc = opts.sample.cells[j - 1] || '';
+        if (sc === '') continue;
+        S(2, 'PuzzleBoard' + j).FillRGB = WHITE;
+        S(2, 'PuzzleCache' + j).Text = sc;
+        if (!C.isLetter(sc)) S(2, 'PuzzleBoard' + j).Text = sc;
+        else if (S(2, 'FirstPuzzleTileWithLetter').Text === '') S(2, 'FirstPuzzleTileWithLetter').Text = String(j);
+      }
+      S(2, 'CategoryBox').Text = opts.sample.cat;
+    } else if (i === 0) {
       var ex = C.EXAMPLE;
       for (m = 1; m <= 52; m++) {
         if (ex.charAt(m - 1) !== ' ') { S(2, 'PuzzleBoard' + m).FillRGB = WHITE; S(2, 'PuzzleCache' + m).Text = ex.charAt(m - 1); }
@@ -463,7 +480,7 @@
     S(2, 'LeftTab').FillRGB = RGB(198, 159, 48);
     S(2, 'LeftTab').Text = 'Solve';
     S(2, 'LetterCounter').Text = '';
-    S(2, 'NextPuzzleToLoad').Text = String(i + 1);
+    if (!opts.sample) S(2, 'NextPuzzleToLoad').Text = String(i + 1);
     if (window.Extras) Extras.onPuzzleLoaded(i, isTossUp, opts);
     if (SpanishNError) {
       var N = S(9, 'SpanN').Text;

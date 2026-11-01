@@ -31,6 +31,10 @@
     L[slide].splice(i + 1, 0, ...objs);
   }
 
+  /* button column on the Extra Features screen, top to bottom */
+  var BTN_ORDER = ['XEditPrizes', 'XEditPrizePuzzle', 'XAddSamples', 'XImportPuzzles', 'XSaveFile', 'XLoadFile', 'XOpenHelp'];
+  function btnY(name) { return 138 + BTN_ORDER.indexOf(name) * 38; }
+
   /* ---------- Extra Features screen (id 40) ---------- */
   function buildExtrasLayout() {
     var s = [];
@@ -43,7 +47,7 @@
       ['XBonusWheel', 'Bonus Prize Wheel:', 'on', 'XExplainBonusWheel']
     ];
     rows.forEach(function (r, i) {
-      var y = 150 + i * 56;
+      var y = 140 + i * 50;
       s.push(txt(clone(9, 'TextBox 152', { n: 'XLabel' + i, x: 150, y: y, w: 230, h: 30 }), r[1]));
       s.push(clone(9, 'Help', { n: 'XHelp' + i, x: 130, y: y + 6, m: r[3] }));
       var tg = txt(clone(9, r[2] === 'on' ? 'BlueTiles' : 'SpanishN', { n: r[0], x: 392, y: y + 2, m: r[0] === 'XMillionWedge' ? 'XToggleMDW' : 'toggleOnOff' }), r[2]);
@@ -51,13 +55,21 @@
     });
     var btns = [['XEditPrizes', 'Edit Bonus Prizes'], ['XEditPrizePuzzle', 'Edit Prize Puzzle Prize'], ['XImportPuzzles', 'Import Puzzles from Text'], ['XSaveFile', 'Save Game File'], ['XLoadFile', 'Load Game File']];
     btns.forEach(function (b, i) {
-      s.push(txt(clone(9, 'TextBox 173', { n: b[0], x: 560, y: 150 + i * 50, w: 240, h: 30, m: b[0] }), b[1]));
+      s.push(txt(clone(9, 'TextBox 173', { n: b[0], x: 560, y: btnY(b[0]), w: 240, h: 30, m: b[0] }), b[1]));
     });
-    s.push(txt(clone(10, 'TextBox 125', { n: 'XHint', y: 410, h: 48 }), 'Prize Puzzle: when loading a puzzle, append P to the number (for example 4P). Turn tracker: click the dot next to a player to give them the turn.'));
+    s.push(txt(clone(10, 'TextBox 125', { n: 'XHint', y: 410, h: 48 }), 'At Load Puzzle: add P for a Prize Puzzle (4P), or type S for a random sample puzzle (ST, SP and STTT work too). Click the dot next to a player to give them the turn.'));
     s.push(clone(10, 'GoBack', { n: 'XGoBack', j: 'back' }));
     s.push(hiddenText('XBonusPrizes', DEFAULT_PRIZES.join('|')));
     s.push(hiddenText('XPrizeName', 'A TRIP TO HAWAII'));
     s.push(hiddenText('XPrizeValue', '10000'));
+    // added in the sample puzzles + help update (kept at the end of the list; see above)
+    var y5 = 140 + 4 * 50;
+    s.push(txt(clone(9, 'TextBox 152', { n: 'XLabel4', x: 150, y: y5, w: 230, h: 30 }), 'Sample Puzzles:'));
+    s.push(clone(9, 'Help', { n: 'XHelp4', x: 130, y: y5 + 6, m: 'XExplainSamples' }));
+    s.push(txt(clone(9, 'BlueTiles', { n: 'XSampleCount', x: 392, y: y5 + 2, m: 'XEditSampleCount' }), String(window.WOFSamples ? WOFSamples.MAX : 100)));
+    s.push(txt(clone(9, 'TextBox 173', { n: 'XAddSamples', x: 560, y: btnY('XAddSamples'), w: 240, h: 30, m: 'XAddSamples', f: { c: '#F7D774', a: 0.85 } }), 'Add Sample Puzzles to My List'));
+    s.push(txt(clone(9, 'TextBox 173', { n: 'XOpenHelp', x: 560, y: btnY('XOpenHelp'), w: 240, h: 30, m: 'XOpenHelp', f: { c: '#7FD6A8', a: 0.85 } }), 'Game Help'));
+    s.push(hiddenText('XSampleUsed', ''));
     L['40'] = s;
   }
 
@@ -92,6 +104,9 @@
     // Settings: a button to the Extra Features screen
     L['9'].push(txt(clone(9, 'TextBox 173', { n: 'XExtrasButton', x: 705, y: 112, w: 150, h: 30, j: 40, f: { c: '#F7D774', a: 0.85 } }), 'Extra Features'));
     L['9'].push(txt(clone(9, 'TextBox 173', { n: 'XShareButton', x: 705, y: 456, w: 150, h: 30, m: 'XShare', f: { c: '#7FD6A8', a: 0.85 } }), 'Share Game'));
+    L['9'].push(txt(clone(9, 'TextBox 173', { n: 'XHelpButton', x: 110, y: 480, w: 150, h: 30, m: 'XOpenHelp', f: { c: '#7FD6A8', a: 0.85 } }), 'Game Help'));
+    // title screen: a Game Help button under the credits
+    L['1'].push(txt(clone(9, 'TextBox 173', { n: 'XHelpTitle', x: 655, y: 476, w: 170, h: 30, m: 'XOpenHelp', f: { c: '#7FD6A8', a: 0.9 } }), 'Game Help'));
     // Puzzle board: turn dots, Million Dollar Wedge tokens, prize ribbon, bonus wheel link, hidden state
     var add = [];
     for (var i = 1; i <= 4; i++) {
@@ -104,6 +119,9 @@
     add.push(hiddenText('XActivePlayer', '1'), hiddenText('XLastLanded', ''), hiddenText('XPrizeActive', ''));
     add.push(hiddenText('XLetterRule', ''), hiddenText('XVowelPaid', ''));   // letter rules state (see Rules below)
     L['2'] = L['2'].concat(add);
+    // puzzle board: a ? button left of the top-right bar opens Help on the current round; queue for sample Triple Toss-Ups
+    L['2'].push(clone(9, 'Help', { n: 'XBoardHelp', x: 688, y: 13, w: 20, h: 20, m: 'XOpenHelpBoard' }));
+    L['2'].push(hiddenText('XSampleQueue', ''));
     // Million Dollar Wedge item on the Normal, Mystery and Express wheels (hidden until switched on)
     [3, 4, 5].forEach(function (n) {
       var wc = find(n, 'WildCard', function (o) { return o.p && /^TheWheel#/.test(o.p); });
@@ -202,17 +220,47 @@
   function bonusMode() { return S(2, 'Bonus Round').Visible; }
   async function pickCategoryFlow() {
     var next = parseInt(S(2, 'NextPuzzleToLoad').Text, 10) || 1;
-    var def = [next, next + 1, next + 2].join(', ');
-    var raw = await Dlg.input('Bonus Round: enter three puzzle numbers. The contestant picks one of their categories.\n\n(Leave blank to load a single puzzle the usual way.)', 'Bonus Round Categories', def);
+    var haveOwn = VBA.puzzleExists(next) && VBA.puzzleExists(next + 1) && VBA.puzzleExists(next + 2);
+    var def = !haveOwn && samplesOn() ? 'S' : [next, next + 1, next + 2].join(', ');
+    var raw = await Dlg.input('Bonus Round: enter three puzzle numbers. The contestant picks one of their categories.' +
+      (samplesOn() ? '\n\nType S for three random sample puzzles, or mix them in, like 10, S, S42.' : '') +
+      '\n\n(Leave blank to load a single puzzle the usual way.)', 'Bonus Round Categories', def);
     if (raw == null) return true;              // cancelled
     if (!raw.trim()) return false;             // fall back to the slideshow's prompt
-    var nums = raw.split(/[^0-9]+/).filter(Boolean).map(Number);
-    if (nums.length !== 3) { await Dlg.msg('Please enter exactly three puzzle numbers, like 10, 11, 12.', 'Bonus Round Categories'); return true; }
-    for (var i = 0; i < 3; i++) if (!VBA.puzzleExists(nums[i])) { await Dlg.msg('No puzzle found for number ' + nums[i] + '.', 'Bonus Round Categories'); return true; }
-    var cats = nums.map(function (n) { var idx = Math.floor((n - 1) / 12); return S(App.pageId(idx), 'PuzzleCategory' + n).Text || '(NO CATEGORY)'; });
-    var pick = await chooseCard(cats);
+    var toks = raw.trim().split(/[\s,;]+/).filter(Boolean);
+    if (toks.length === 1 && /^S$/i.test(toks[0]) && samplesOn()) toks = ['S', 'S', 'S'];
+    if (toks.length !== 3) { await Dlg.msg('Please enter exactly three puzzle numbers, like 10, 11, 12' + (samplesOn() ? ' (or S for three random sample puzzles)' : '') + '.', 'Bonus Round Categories'); return true; }
+    var picks = [], randomSlots = [], fixed = [];
+    for (var i = 0; i < 3; i++) {
+      var tk = toks[i].toUpperCase(), m;
+      if (/^\d+$/.test(tk)) {
+        var num = +tk;
+        if (!VBA.puzzleExists(num)) { await Dlg.msg('No puzzle found for number ' + num + '.', 'Bonus Round Categories'); return true; }
+        picks.push({ num: num, cat: S(App.pageId(Math.floor((num - 1) / 12)), 'PuzzleCategory' + num).Text || '(NO CATEGORY)' });
+      } else if ((m = /^S(\d*)$/.exec(tk)) && samplesOn()) {
+        if (m[1]) {
+          var k = +m[1];
+          if (k < 1 || k > sampleCount()) { await Dlg.msg('There is no sample puzzle ' + k + '. Sample puzzles go from 1 to ' + sampleCount() + '.', 'Bonus Round Categories'); return true; }
+          fixed.push(k); picks.push({ sample: k });
+        } else { randomSlots.push(i); picks.push(null); }
+      } else { await Dlg.msg('"' + toks[i] + '" is not a puzzle number' + (samplesOn() ? ' or a sample code (S or S7)' : '') + '.', 'Bonus Round Categories'); return true; }
+    }
+    picks.forEach(function (p) { if (p && p.sample) p.cat = WOFSamples.get(p.sample).cat; });
+    if (randomSlots.length) {
+      // the contestant should see different categories, so random samples skip a category already on a card
+      var takenCats = picks.filter(Boolean).map(function (p) { return p.cat; });
+      var r = randomSamples(randomSlots.length, fixed, true);
+      if (!r || r.length < randomSlots.length) { await Dlg.msg('There are not enough sample puzzles turned on for that. Raise the number in Extra Features, Sample Puzzles.', 'Bonus Round Categories'); return true; }
+      var chosenIds = [];
+      r.forEach(function (k) { if (chosenIds.length < randomSlots.length && takenCats.indexOf(WOFSamples.get(k).cat) < 0) { chosenIds.push(k); takenCats.push(WOFSamples.get(k).cat); } });
+      r.forEach(function (k) { if (chosenIds.length < randomSlots.length && chosenIds.indexOf(k) < 0) chosenIds.push(k); });   // small pools: allow a repeat category
+      randomSlots.forEach(function (slot, j) { picks[slot] = { sample: chosenIds[j], cat: WOFSamples.get(chosenIds[j]).cat }; });
+    }
+    var pick = await chooseCard(picks.map(function (p) { return p.cat; }));
     if (pick < 0) return true;
-    await VBA.loadPuzzle(nums[pick], 0);
+    var chosen = picks[pick];
+    if (chosen.sample) { if (await VBA.loadPuzzle(-1, 0, { sample: WOFSamples.get(chosen.sample) })) markUsed(chosen.sample); }
+    else await VBA.loadPuzzle(chosen.num, 0);
     return true;
   }
   function chooseCard(cats) {
@@ -276,6 +324,115 @@
     VBA.Play('SolvePuzzleChime');
   };
 
+  /* ---------- sample puzzles ----------
+     Built-in puzzles (samples.js), separate from the host's own list. The Sample Puzzles box on Extra Features holds
+     how many of them the game draws from (1-100, or off). XSampleUsed lists the ones already played this game, so a
+     random pick doesn't repeat until every one in the pool has been used. At Load Puzzle:
+       S     a random sample        S7    sample 7
+       ST    random as a Toss-Up    SP    random as a Prize Puzzle
+       STTT  three random samples as a Triple Toss-Up (S7TTT plays 7, 8 and 9) */
+  var SAMPLE_ON = '#C3D69B', SAMPLE_OFF = '#D99694';   // the slideshow's own on/off colours
+  function sampleCount() {
+    var t = (S(40, 'XSampleCount').Text || '').trim().toLowerCase();
+    if (t === 'off') return 0;
+    var n = parseInt(t, 10);
+    if (isNaN(n)) return WOFSamples.MAX;
+    return Math.max(0, Math.min(WOFSamples.MAX, n));
+  }
+  function samplesOn() { return !!window.WOFSamples && sampleCount() > 0; }
+  function usedSamples() { return S(40, 'XSampleUsed').Text.split(',').filter(Boolean).map(Number); }
+  function markUsed(k) { var u = usedSamples(); if (u.indexOf(k) < 0) { u.push(k); S(40, 'XSampleUsed').Text = u.join(','); } }
+  function shuffle(a) { for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+  /* howMany different random samples from the pool, avoiding ones already played (and `avoid`); null if the pool is too small */
+  /* (with whole = true: every fresh sample in random order, at least howMany long) */
+  function randomSamples(howMany, avoid, whole) {
+    var n = sampleCount(), all = [], used = usedSamples();
+    avoid = avoid || [];
+    for (var k = 1; k <= n; k++) if (avoid.indexOf(k) < 0) all.push(k);
+    if (all.length < howMany) return null;
+    var fresh = all.filter(function (k) { return used.indexOf(k) < 0; });
+    if (fresh.length < howMany) {             // every sample in the pool has been played: start over
+      S(40, 'XSampleUsed').Text = '';
+      fresh = all;
+      toast('Every sample puzzle has been played, so the list starts over');
+    }
+    var mixed = shuffle(fresh.slice());
+    return whole ? mixed : mixed.slice(0, howMany);
+  }
+  function paintSampleBox() {
+    var n = sampleCount(), box = S(40, 'XSampleCount');
+    box.Text = n > 0 ? String(n) : 'off';
+    box.FillRGB = n > 0 ? SAMPLE_ON : SAMPLE_OFF;
+  }
+  async function trySampleCode(raw) {
+    var m = /^\s*S(?:AMPLE)?\s*(\d*)\s*(TTT|T|P)?\s*$/i.exec(String(raw || ''));
+    if (!m || !window.WOFSamples) return false;
+    if (!samplesOn()) { await Dlg.msg('Sample puzzles are turned off. Turn them on in Settings, then Extra Features, Sample Puzzles.', 'Sample Puzzles'); return true; }
+    var mode = (m[2] || '').toUpperCase(), kind = mode === 'TTT' ? 3 : mode === 'T' ? 1 : 0, n = sampleCount(), ids;
+    var need = kind === 3 ? 3 : 1;
+    if (n < need) { await Dlg.msg('A Triple Toss-Up needs at least 3 sample puzzles, but only ' + n + ' ' + (n === 1 ? 'is' : 'are') + ' turned on. Raise the number in Extra Features, Sample Puzzles.', 'Sample Puzzles'); return true; }
+    if (m[1]) {
+      var k = +m[1];
+      if (k < 1 || k > n) { await Dlg.msg('There is no sample puzzle ' + k + '. Sample puzzles go from 1 to ' + n + '.', 'Sample Puzzles'); return true; }
+      ids = [k];
+      for (var d = 1; d < need; d++) ids.push(((k - 1 + d) % n) + 1);
+    } else ids = randomSamples(need);
+    var ok = await VBA.loadPuzzle(-1, kind, { sample: WOFSamples.get(ids[0]), prize: mode === 'P' });
+    if (ok) {
+      ids.forEach(markUsed);
+      if (kind === 3) S(2, 'XSampleQueue').Text = ids.slice(1).join(',');
+      toast('Sample puzzle ' + ids[0] + ' loaded');
+    }
+    return true;
+  }
+  /* Load Next during a sample Triple Toss-Up */
+  async function loadNextSample() {
+    var q = S(2, 'XSampleQueue').Text.split(',').filter(Boolean).map(Number);
+    if (!q.length) return false;
+    var k = q.shift();
+    S(2, 'XSampleQueue').Text = q.join(',');
+    await VBA.loadPuzzle(-1, 4, { sample: WOFSamples.get(k) });
+    return true;
+  }
+  function lastUsedPuzzle() {
+    var last = 0, max = App.pageCount() * 12;
+    for (var i = 1; i <= max; i++) if (VBA.puzzleExists(i)) last = i;
+    return last;
+  }
+  App.M.XEditSampleCount = async function () {
+    var v = await Dlg.input('How many sample puzzles should the game draw from? Enter a number from 1 to ' + WOFSamples.MAX + ' (' + WOFSamples.MAX + ' uses every one).\n\nEnter 0 or off to turn sample puzzles off.', 'Sample Puzzles', samplesOn() ? String(sampleCount()) : String(WOFSamples.MAX));
+    if (v == null) return;
+    v = v.trim().toLowerCase();
+    var n = v === 'off' ? 0 : (/^\d+$/.test(v) ? parseInt(v, 10) : NaN);
+    if (isNaN(n) || n < 0 || n > WOFSamples.MAX) { await Dlg.msg('Please enter a whole number from 1 to ' + WOFSamples.MAX + ', or 0 to turn sample puzzles off.', 'Sample Puzzles'); return; }
+    S(40, 'XSampleCount').Text = n > 0 ? String(n) : 'off';
+    paintSampleBox();
+  };
+  App.M.XAddSamples = async function () {
+    if (!samplesOn()) { await Dlg.msg('Sample puzzles are turned off. Click the Sample Puzzles box and enter a number from 1 to ' + WOFSamples.MAX + ' first.', 'Add Sample Puzzles'); return; }
+    var n = sampleCount();
+    var v = await Dlg.input('How many sample puzzles should be added to your own puzzle list? (1 to ' + n + ')\n\nThey go after your last puzzle, so nothing you wrote is replaced, and they are picked in a random order. You can then edit them like any puzzle in Set Up Puzzles.', 'Add Sample Puzzles', String(n));
+    if (v == null) return;
+    var c = /^\s*\d+\s*$/.test(v) ? parseInt(v, 10) : NaN;
+    if (!(c >= 1 && c <= n)) { await Dlg.msg('Please enter a whole number from 1 to ' + n + '.', 'Add Sample Puzzles'); return; }
+    var start = lastUsedPuzzle() + 1, order = [];
+    for (var k = 1; k <= n; k++) order.push(k);
+    shuffle(order).slice(0, c).forEach(function (k, i) { var p = WOFSamples.get(k); writePuzzle(start + i, p.cells, p.cat); });
+    VBA.shadeOccupiedPuzzlesFull();
+    await Dlg.msg('Added ' + c + ' sample puzzle' + (c === 1 ? '' : 's') + ' to your list as number' + (c === 1 ? ' ' + start : 's ' + start + ' to ' + (start + c - 1)) + '.', 'Add Sample Puzzles');
+  };
+
+  /* ---------- help ---------- */
+  function currentHelpTopic() {
+    if (S(2, 'TossUpBanner').Visible) return S(2, 'TossUpTitle').Text.indexOf('Triple') >= 0 ? 'tripletossup' : 'tossup';
+    if (S(2, 'XPrizeActive').Text === '1') return 'prize';
+    var rounds = [['Bonus Round', 'bonus'], ['Fourth Round', 'finalspin'], ['Express Round', 'express'], ['Mystery Round', 'mystery']];
+    for (var i = 0; i < rounds.length; i++) if (S(2, rounds[i][0]).Visible) return rounds[i][1];
+    return 'normal';
+  }
+  App.M.XOpenHelp = function () { if (window.WOFHelp) WOFHelp.open(); };
+  App.M.XOpenHelpBoard = function () { if (window.WOFHelp) WOFHelp.open(currentHelpTopic()); };
+
   /* ---------- puzzle import ---------- */
   App.M.XImportPuzzles = async function () {
     var box = document.createElement('div');
@@ -335,6 +492,7 @@
     XExplainTurn: ['Shows whose turn it is with a gold dot and a highlighted name. The turn passes automatically on Bankrupt, Lose a Turn, a letter that is not in the puzzle, a wrong solve (with the verify Solve Button), or when the shot clock runs out. Click a dot to hand the turn to that player. The default is on.', 'Turn Tracker'],
     XExplainMDW: ['Puts the Million Dollar Wedge on the Normal, Mystery and Express wheels, as on the show: a sliver of ONE MILLION between two Bankrupts. Landing in the middle is worth $500; give the player the wedge with the green token next to their name.\n\nIf that player reaches the Bonus Round still holding it, the $100,000 envelope on the Bonus Wheel becomes $1,000,000. The default is off.', 'Million Dollar Wedge'],
     XExplainPick: ['Before the Bonus Round puzzle, enter three puzzle numbers. The contestant sees their three categories and picks one, like on the show. The default is on.', 'Pick-a-Category Bonus'],
+    XExplainSamples: ['The game comes with 100 sample puzzles of its own, kept apart from yours. At Load Puzzle, type S for a random one that hasn\u2019t been played yet (ST for a Toss-Up, SP for a Prize Puzzle, STTT for a Triple Toss-Up), or S7 for sample puzzle 7. In the Bonus Round, type S for three random categories.\n\nThis number is how many of them the game draws from: 1 to 100 (the default, 100, uses all of them). Enter 0 to turn them off.\n\nAdd Sample Puzzles to My List copies some into your own puzzle list so you can edit them.', 'Sample Puzzles'],
     XExplainBonusWheel: ['Adds a Bonus Wheel with 24 envelopes. In the Bonus Round, click the Bonus Wheel button at the top right of the puzzle board to spin it. Edit the prizes with Edit Bonus Prizes. The default is on.', 'Bonus Prize Wheel']
   };
   Object.keys(EXPLAIN).forEach(function (k) { App.M[k] = function () { return Dlg.msg(EXPLAIN[k][0], EXPLAIN[k][1]); }; });
@@ -456,7 +614,11 @@
   var lastLanded = '';
   var Extras = {
     init: function () {},
-    afterBoot: function () { paintTurn(); syncBonusLink(); },
+    afterBoot: function () { paintTurn(); syncBonusLink(); try { paintSampleBox(); } catch (e) { } },
+    samplesOn: function () { try { return samplesOn(); } catch (e) { return false; } },
+    trySampleCode: trySampleCode,
+    loadNextSample: loadNextSample,
+    currentHelpTopic: currentHelpTopic,
     openPanel: function () { App.show(40); },
     onBuild: function (s, id) {
       if (id === 2) { setTimeout(function () { try { placePlayerExtras(); paintTurn(); } catch (e) { } }, 0); }
@@ -467,6 +629,7 @@
     onClearBoard: function () { Rules.reset(); S(2, 'XPrizeActive').Text = ''; S(2, 'XPrizeRibbon').Visible = false; },
     onPuzzleLoaded: function (i, isTossUp, opts) {
       Rules.reset();
+      if (isTossUp !== 4) S(2, 'XSampleQueue').Text = '';
       var prize = !!(opts && opts.prize);
       S(2, 'XPrizeActive').Text = prize ? '1' : '';
       S(2, 'XPrizeRibbon').Visible = prize;
@@ -493,7 +656,7 @@
     },
     onPlayersChanged: function () { placePlayerExtras(); paintTurn(); },
     onRoundChanged: function () { Rules.reset(); syncBonusLink(); },
-    onWipe: function () { Rules.reset(); S(2, 'XActivePlayer').Text = '1'; for (var i = 1; i <= 4; i++) S(2, 'Player' + i + 'MDW').FillTransparency = 1; if (mdwOn()) setMDWOnWheels(true); paintTurn(); },
+    onWipe: function () { Rules.reset(); S(2, 'XSampleQueue').Text = ''; S(40, 'XSampleUsed').Text = ''; S(2, 'XActivePlayer').Text = '1'; for (var i = 1; i <= 4; i++) S(2, 'Player' + i + 'MDW').FillTransparency = 1; if (mdwOn()) setMDWOnWheels(true); paintTurn(); },
     beforeLoadPrompt: async function () {
       if (bonusMode() && on('XPickCategory')) return pickCategoryFlow();
       return false;

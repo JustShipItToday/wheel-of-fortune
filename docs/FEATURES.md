@@ -44,6 +44,25 @@ Before the Bonus Round puzzle, enter three puzzle numbers; the contestant sees t
 ### Prize Puzzle
 Load a puzzle with **P** (for example `4P`) and name the prize. When it is solved, you choose the winner and the prize value is added to their round score. See [Game Modes](MODES.md).
 
+### Sample puzzles
+**100 ready-made puzzles** (Sample 1 to Sample 100) across classic categories, kept separate from your own puzzle list so they never replace anything. At **Load Puzzle**:
+
+| Type | You get |
+|---|---|
+| `S` | A random sample puzzle that hasn't been played yet this game |
+| `S7` | Sample puzzle 7 |
+| `ST` / `SP` | A random sample as a Toss-Up / Prize Puzzle |
+| `STTT` | Three different random samples as a Triple Toss-Up (`S7TTT` plays 7, 8 and 9) |
+
+In the Bonus Round with Pick-a-Category on, type `S` for three random sample categories (always three different categories), or mix them with your own puzzles, like `10, S, S42`. If you haven't written any puzzles yet, Load Puzzle fills in `S` for you.
+
+The **Sample Puzzles** box on Extra Features sets how many of them the game draws from, **1 to 100** (default 100), or **0** to turn them off. **Add Sample Puzzles to My List** copies any number of them, in random order, after your last puzzle so you can edit them. Random picks don't repeat until every sample in the pool has been played; wiping puzzles and scores resets that.
+
+### In-game Help
+A full Help screen with a page for every round (Normal, Mystery, Express, Final Spin, Bonus), puzzle type (Toss-Up, Triple Toss-Up, Prize Puzzle), Bonus Round extra, wheel space and item (Bankrupt, Lose a Turn, Free Play, Wild Card, Gift Tag, Million Dollar Wedge, $5,000 Sliver, $5 Wedge) and game feature. Each page covers **what it is, how to set it up, how to play it, tips, and what to say as host**, with links to related pages and a search box.
+
+Open it from **Game Help** on the title screen, Settings or Extra Features, the **⋯** menu, or the keyboard (**F1** or **?**). The **?** at the top of the puzzle board opens the page for the round you are playing right now.
+
 ### Import puzzles from text
 Paste one puzzle per line as `CATEGORY | puzzle text`. Separate board rows with `\`, or leave them out and rows are chosen for you. Lines that don't fit on the board are listed so you can fix them.
 
