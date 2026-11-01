@@ -77,13 +77,13 @@
     25: function (s) {
       var H = function (t) { return { runs: [{ t: t, b: 1, pt: 15 }], gap: 0 }; };
       T(s, 'TextBox 33', 'Wheel of Fortune Web Edition');
-      rich(s, 'TextBox 36', [{ al: 'center', runs: [{ t: 'Developer: ', b: 1, pt: 16 }, { t: 'Avi Lindenboim', pt: 16 }, { t: '     Revised: ', b: 1, pt: 16 }, { t: 'October 2026', pt: 16 }] }]);
+      rich(s, 'TextBox 36', [{ al: 'center', runs: [{ t: 'Developer: ', b: 1, pt: 16 }, { t: 'Avi Lindenboim', pt: 16 }, { t: '     Revised: ', b: 1, pt: 16 }, { t: 'November 2026', pt: 16 }] }]);
       rich(s, 'TextBox 34', [
         H('The Original'),
         { gap: 3, runs: [{ t: 'Wheel of Fortune for PowerPoint', b: 1 }, { t: ' was created by ' }, { t: 'Timothy Hsu (Games by Tim)', b: 1 }, { t: '. This edition is based on his game: the rules, screens, layout and sound effects all come from his work (v6.4).' }] },
         { gap: 5, runs: [{ t: 'View the original', a: ORIGINAL_URL }, { t: ' on GitHub.' }] },
         { gap: 12, runs: [{ t: 'The Web Edition', b: 1, pt: 15 }] },
-        { gap: 3, runs: [{ t: 'Completely redone for the web by ' }, { t: 'Avi Lindenboim', b: 1 }, { t: ': rebuilt to run in any browser, with a redrawn wheel and logo, plus a Bonus Wheel, Million Dollar Wedge, Prize Puzzle, turn tracker and pick-a-category bonus.' }] }
+        { gap: 3, runs: [{ t: 'Completely redone for the web by ' }, { t: 'Avi Lindenboim', b: 1 }, { t: ': rebuilt to run in any browser, with a redrawn wheel and logo, plus a Bonus Wheel, Million Dollar Wedge, Prize Puzzle, turn tracker, pick-a-category bonus, 100 sample puzzles and an in-game Help screen.' }] }
       ], 11);
       rich(s, 'TextBox 35', [
         H('Special Thanks'),
@@ -134,7 +134,7 @@
     b.onclick = async function () {
       if (Dlg.isOpen() || App.busy) return;
       var fs = !!document.fullscreenElement;
-      var choices = [fs ? 'Exit full screen' : 'Full screen', WOFAudio.muted ? 'Sound on' : 'Sound off', 'Share game link', 'Save game file', 'Load game file'].concat(Persist.hasBackup() ? ['Switch to previous game'] : [], ['Extra features', 'Close']);
+      var choices = [fs ? 'Exit full screen' : 'Full screen', WOFAudio.muted ? 'Sound on' : 'Sound off', 'Share game link', 'Save game file', 'Load game file'].concat(Persist.hasBackup() ? ['Switch to previous game'] : [], ['Extra features', 'Game help', 'Close']);
       var i = await Dlg.choose('Your game saves automatically in this browser. A game file lets you move it to another computer or keep a backup.', 'Menu', choices);
       var c = choices[i];
       if (c === 'Full screen') document.documentElement.requestFullscreen && document.documentElement.requestFullscreen().catch(function () { });
@@ -149,6 +149,7 @@
           if (ok) location.reload(); else await Dlg.msg("That file couldn't be loaded. Pick a .json game file saved from this game.", 'Load Game File');
         }
       } else if (c === 'Extra features' && window.Extras) Extras.openPanel();
+      else if (c === 'Game help' && window.WOFHelp) WOFHelp.open(App.current === 2 && window.Extras ? Extras.currentHelpTopic() : undefined);
     };
     document.getElementById('app').appendChild(b);
   }

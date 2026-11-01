@@ -17,7 +17,7 @@ A step-by-step guide to running a game, including what to say as the host. For t
 
 ## 2. Running a round
 
-1. On the **Puzzle Board**, click the blue **Load Puzzle** tab at the bottom left and type the puzzle number.
+1. On the **Puzzle Board**, click the blue **Load Puzzle** tab at the bottom left and type the puzzle number (or **S** for a random built-in sample puzzle).
    - `3T` loads puzzle 3 as a Toss-Up.
    - `3TTT` starts a Triple Toss-Up with puzzles 3, 4 and 5.
    - `3P` loads it as a Prize Puzzle.
@@ -70,6 +70,8 @@ Click **End Game** (top right). You can **end the show**, **wipe all scores**, o
 
 ## Tips
 
+- **Need a reminder mid-game?** Press **F1** or click the **?** at the top of the puzzle board: it opens the Help page for the round you are in.
+- **Out of puzzles?** Type **S** at Load Puzzle for one of the 100 built-in samples.
 - **Hosting over a video call?** Share the browser tab and use full screen.
 - **Using a real wheel?** Click the Value Panel to set the spun value by hand.
 - **Don't use the browser's Back button or reload** mid-game; use the on-screen buttons. (Autosave should recover a reload, but don't test it live.)

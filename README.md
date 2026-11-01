@@ -13,14 +13,18 @@ Developed by **Avi Lindenboim**. Based on **Wheel of Fortune for PowerPoint** by
 - Every screen and rule of the original game: Normal, Mystery, Express and Final Spin rounds, Toss-Ups, Triple Toss-Ups, the Bonus Round, Free Play, Wild Card, Gift Tag, Puzzle Scribe, Puzzle Properties, a shot clock, sound effects, backdrops and color schemes.
 - A redrawn wheel and logo, so the game is a close lookalike rather than a copy of any artwork.
 - **Extra features** added in this edition: a turn tracker, Million Dollar Wedge, a 24-envelope Bonus Wheel with editable prizes, Prize Puzzle, a pick-a-category Bonus Round, and puzzle import from text.
+- **100 built-in sample puzzles**: type `S` at Load Puzzle for a random one (no setup needed), kept separate from your own puzzles.
+- **In-game Help**: a page for every round, puzzle type, wheel space and feature, explaining what it is, how to set it up and how to play it. Open it from the title screen, Settings, the **?** on the puzzle board, or press **F1**.
 - Autosave in your browser, plus save/load of a game file to move a game to another computer.
 - **Share a game as a link**: copy one link with your puzzles, settings and (optionally) scores and the current puzzle, and a friend can open, edit and re-share it. No server or account needed.
 
 ## Quick start
 
 1. Open the link above (or download `index.html` and double-click it; it works offline).
-2. Click **Set Up Puzzles** and add some puzzles (or use **Import Puzzles from Text** under Extra Features).
-3. Click **Puzzle Board**, click **Load Puzzle**, type a puzzle number, and play.
+2. Click **Puzzle Board**, click **Load Puzzle**, type **S** for a random sample puzzle, and play.
+3. When you're ready for your own, click **Set Up Puzzles** (or use **Import Puzzles from Text** under Extra Features) and load them by number.
+
+Stuck on anything? Click **Game Help** or press **F1**.
 
 Full instructions are in **[docs/HOW-TO-USE.md](docs/HOW-TO-USE.md)**.
 
