@@ -354,6 +354,25 @@
       related: ['finalspin', 'turntracker']
     },
     {
+      id: 'spinlength', group: 5, icon: '🎡', title: 'Spin Length',
+      what: 'How long the wheel spins. The original slideshow always spins for **3.6 seconds**; here you can make it quicker for a big class or slower for more suspense, and let the biggest moments build tension.',
+      use: [
+        'Open **Settings → Wheel Settings → Spin Length**.',
+        '**Base Spin Length** is a regular spin: **Quick** 2.5s, **Classic** 3.6s (the default), **Dramatic** 5.5s, **Nail-Biter** 8s, or **Custom** from 1.5 to 15 seconds.',
+        '**Build Tension** (on by default) gives the wheels with more at stake a longer spin than the base.',
+        'Click any wheel’s time to set your own for that wheel (it turns gold). Type **auto** to go back to automatic. **Reset to Defaults** undoes everything.'
+      ],
+      table: [
+        ['Normal Round', 'the base length (3.6s)'],
+        ['Mystery / Express Round', '15% longer (4.1s)'],
+        ['Fourth Round', '25% longer (4.5s)'],
+        ['Final Spin', '75% longer (6.3s), with a slower crawl to the stop'],
+        ['Bonus Wheel', 'twice as long (7.2s), with a slower crawl to the stop']
+      ],
+      tips: ['Times shown are with the Classic base. Pick Dramatic and the Bonus Wheel spins for 11 seconds.', 'The spin sound stretches or shrinks to fit the spin.', 'The settings are saved with the game, so they travel in a game file or a shared link.'],
+      related: ['finalspin', 'bonuswheel', 'normal']
+    },
+    {
       id: 'solve', group: 5, icon: '✅', title: 'Solving (reveal or verify)',
       what: 'How the Solve button works is up to you, set in **Settings → Solve Button**.',
       play: [

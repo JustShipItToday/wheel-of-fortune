@@ -4,6 +4,7 @@
      • Bonus prize wheel (24 envelopes, prizes editable; defaults follow the show's $40,000 to $100,000 range plus cars)
      • Prize Puzzle (load a puzzle number with P, e.g. 4P; the solver wins the prize)
      • Pick-a-category Bonus Round (the contestant chooses one of three categories)
+     • Spin Length screen (Wheel Settings): how long each wheel spins, with optional extra tension on the big wheels
      • Extra Features screen, puzzle import from text, game file save/load
    Like the rest of the port, extras keep their state in shapes, so autosave covers them. The new shapes are
    added to the slide layouts before anything is built, styled by cloning the slideshow's own shapes. */
@@ -99,8 +100,37 @@
     L['41'] = s;
   }
 
+  /* ---------- Spin Length screen (id 42), opened from Wheel Settings ---------- */
+  var SP = WOFCore.SPIN;
+  function buildSpinLayout() {
+    var s = [], i;
+    s.push(txt(clone(9, 'TextBox 44', { n: 'XSpinTitle' }), 'Spin Length'));
+    s.push(txt(clone(10, 'TextBox 125', { n: 'XSpinIntro' }), 'How long the wheel spins. With Build Tension on, the big moments (Final Spin, the Bonus Wheel) spin longer than a regular round, so the wait is part of the show.'));
+    s.push(txt(clone(9, 'TextBox 152', { n: 'XSpinLabel0', x: 150, y: 130, w: 230, h: 30 }), 'Base Spin Length:'));
+    s.push(clone(9, 'Help', { n: 'XSpinHelp0', x: 130, y: 136, m: 'XExplainSpinBase' }));
+    s.push(txt(clone(9, 'BlueTiles', { n: 'XSpinBaseBox', x: 392, y: 132, w: 190, m: 'XEditSpinBase' }), 'Classic · 3.6s'));
+    s.push(txt(clone(9, 'TextBox 152', { n: 'XSpinLabel1', x: 150, y: 180, w: 230, h: 30 }), 'Build Tension:'));
+    s.push(clone(9, 'Help', { n: 'XSpinHelp1', x: 130, y: 186, m: 'XExplainSpinTension' }));
+    s.push(txt(clone(9, 'BlueTiles', { n: 'XSpinTension', x: 392, y: 182, m: 'XToggleSpinTension' }), 'on'));
+    s.push(txt(clone(10, 'TextBox 12', { n: 'XSpinHeader', x: 330, y: 232, w: 300 }), 'Spin Length by Wheel'));
+    s.push(clone(9, 'Help', { n: 'XSpinHelp2', x: 645, y: 241, m: 'XExplainSpinWheels' }));
+    SP.KEYS.forEach(function (k, n) {
+      var col = n % 2, row = Math.floor(n / 2), y = 288 + row * 50, x = col ? 515 : 123;
+      s.push(txt(clone(9, 'TextBox 152', { n: 'XSpinLabelW_' + k, x: x, y: y, w: 210, h: 30 }), SP.LABELS[k] + ':'));
+      s.push(txt(clone(9, 'BlueTiles', { n: 'XSpinT_' + k, x: x + 222, y: y + 2, w: 100, m: 'XEditSpinWheel' }), '3.6s'));
+      s.push(hiddenText('XSpinO_' + k, ''));
+    });
+    s.push(txt(clone(10, 'TextBox 125', { n: 'XSpinHint', y: 436, h: 44 }), 'Green times follow the base length. Gold times are ones you set yourself. Click any time to change it.'));
+    s.push(clone(10, 'GoBack', { n: 'XSpinGoBack', j: 'back' }));
+    s.push(txt(clone(9, 'TextBox 173', { n: 'XSpinReset', x: 600, y: 491, w: 200, h: 30, m: 'XSpinReset', f: { c: '#F7D774', a: 0.85 } }), 'Reset to Defaults'));
+    s.push(hiddenText('XSpinBase', String(SP.DEFAULT_BASE)));
+    L['42'] = s;
+  }
+
   /* ---------- additions to the slideshow's own slides ---------- */
   function extendLayouts() {
+    // Wheel Settings: a button to the Spin Length screen
+    L['10'].push(txt(clone(9, 'TextBox 173', { n: 'XSpinButton', x: 600, y: 491, w: 200, h: 30, j: 42, f: { c: '#F7D774', a: 0.85 } }), 'Spin Length'));
     // Settings: a button to the Extra Features screen
     L['9'].push(txt(clone(9, 'TextBox 173', { n: 'XExtrasButton', x: 705, y: 112, w: 150, h: 30, j: 40, f: { c: '#F7D774', a: 0.85 } }), 'Extra Features'));
     L['9'].push(txt(clone(9, 'TextBox 173', { n: 'XShareButton', x: 705, y: 456, w: 150, h: 30, m: 'XShare', f: { c: '#7FD6A8', a: 0.85 } }), 'Share Game'));
@@ -131,6 +161,7 @@
 
   buildExtrasLayout();
   buildBonusWheelLayout();
+  buildSpinLayout();
   extendLayouts();
 
   /* ---------- helpers ---------- */
@@ -310,10 +341,11 @@
     S(sl, 'XMillion').Text = million ? String(holder) : '';
     S(sl, 'WheelValue').Text = 'Envelope ' + (k + 1);
     S(sl, 'XRevealPrize').Visible = false;
-    VBA.Play('SpinWheel');
+    var plan = spinPlan(sl, false);
+    VBA.Play('SpinWheel', plan.ms);
     var hide = ['WheelValue', 'BackText', 'BackOval'].map(function (n) { return S(sl, n); });
     hide.forEach(function (s) { s.el.style.visibility = 'hidden'; });
-    await WOFWheel.spin(App.slide(sl).el, r / 10, 3600);
+    await WOFWheel.spin(App.slide(sl).el, r / 10, plan.ms, plan);
     hide.forEach(function (s) { s.el.style.visibility = ''; });
     S(sl, 'XRevealPrize').Visible = true;
   };
@@ -322,6 +354,71 @@
     if (!p) { await Dlg.msg('Spin the wheel first.', 'Reveal Prize'); return; }
     S(41, 'WheelValue').Text = p;
     VBA.Play('SolvePuzzleChime');
+  };
+
+  /* ---------- spin length ----------
+     State lives in shapes on screen 42 (so autosave, game files and share links carry it):
+       XSpinBase       the base length in seconds (hidden)       XSpinTension   on/off toggle
+       XSpinO_<wheel>  a length the host set for that wheel, or '' for automatic (hidden)
+       XSpinBaseBox and XSpinT_<wheel> are only what is painted on screen (see paintSpin). */
+  var SPIN_GOLD = '#F7D774';
+  function spinState() {
+    var base = WOFCore.parseSeconds(S(42, 'XSpinBase').Text, SP.MIN, SP.BASE_MAX) || SP.DEFAULT_BASE, over = {};
+    SP.KEYS.forEach(function (k) { over[k] = WOFCore.parseSeconds(S(42, 'XSpinO_' + k).Text, SP.MIN, SP.MAX); });
+    return { base: base, tension: S(42, 'XSpinTension').Text !== 'off', over: over };
+  }
+  function paintSpin() {
+    var st = spinState(), nm = WOFCore.spinPresetName(st.base);
+    S(42, 'XSpinBaseBox').Text = (nm || 'Custom') + ' · ' + WOFCore.fmtSeconds(st.base);
+    SP.KEYS.forEach(function (k) {
+      var box = S(42, 'XSpinT_' + k);
+      box.Text = WOFCore.fmtSeconds(WOFCore.spinSeconds(k, st));
+      box.FillRGB = st.over[k] ? SPIN_GOLD : SAMPLE_ON;
+    });
+  }
+  /* what a spin of this wheel should do right now: {ms, power}; the wheel code turns ms into a number of full turns */
+  function spinPlan(slide, finalSpin) {
+    try {
+      var st = spinState(), key = WOFCore.spinKey(slide, !!finalSpin);
+      return { ms: Math.round(WOFCore.spinSeconds(key, st) * 1000), power: WOFCore.spinPower(key, st.tension), key: key };
+    } catch (e) { return { ms: 3600, power: 2, key: 'normal' }; }
+  }
+  App.M.XEditSpinBase = async function () {
+    var st = spinState(), names = SP.PRESETS.map(function (p) { return p[0]; });
+    var list = SP.PRESETS.map(function (p) { return p[0] + ' (' + WOFCore.fmtSeconds(p[1]) + ')'; }).join(', ');
+    var i = await Dlg.choose('How long should a regular spin of the wheel last?\n\n' + list + '. Classic is the original slideshow.\n\nNow: ' + WOFCore.fmtSeconds(st.base) + '. With Build Tension on, the bigger wheels spin longer than this.', 'Base Spin Length', names.concat(['Custom…', 'Cancel']));
+    if (i < 0 || i === names.length + 1) return;
+    var v;
+    if (i < names.length) v = SP.PRESETS[i][1];
+    else {
+      var raw = await Dlg.input('Seconds for a regular spin (' + SP.MIN + ' to ' + SP.BASE_MAX + '):', 'Custom Spin Length', String(st.base));
+      if (raw == null) return;
+      v = WOFCore.parseSeconds(raw, SP.MIN, SP.BASE_MAX);
+      if (v == null) { await Dlg.msg('Please enter a number of seconds from ' + SP.MIN + ' to ' + SP.BASE_MAX + ', like 4 or 6.5.', 'Base Spin Length'); return; }
+    }
+    S(42, 'XSpinBase').Text = String(v);
+    paintSpin();
+  };
+  App.M.XToggleSpinTension = function (el) { App.M.toggleOnOff(el); paintSpin(); };
+  App.M.XEditSpinWheel = async function (el) {
+    var key = el.dataset.name.replace('XSpinT_', ''), st = spinState(), label = SP.LABELS[key];
+    var auto = WOFCore.spinSeconds(key, { base: st.base, tension: st.tension, over: {} });
+    var raw = await Dlg.input('How many seconds should the ' + label + ' spin? (' + SP.MIN + ' to ' + SP.MAX + ')\n\nAutomatic is ' + WOFCore.fmtSeconds(auto) + '. Type auto, or leave it blank, to go back to automatic.', label + ' Spin Length', st.over[key] ? String(st.over[key]) : 'auto');
+    if (raw == null) return;
+    if (!raw.trim() || /^auto/i.test(raw.trim())) S(42, 'XSpinO_' + key).Text = '';
+    else {
+      var v = WOFCore.parseSeconds(raw, SP.MIN, SP.MAX);
+      if (v == null) { await Dlg.msg('Please enter a number of seconds from ' + SP.MIN + ' to ' + SP.MAX + ', like 5 or 7.5, or type auto.', label + ' Spin Length'); return; }
+      S(42, 'XSpinO_' + key).Text = String(v);
+    }
+    paintSpin();
+  };
+  App.M.XSpinReset = async function () {
+    if (!(await Dlg.confirm('Put every spin length back to the default? (Classic 3.6s, Build Tension on, no custom times.)', 'Reset Spin Length', { defaultNo: true }))) return;
+    S(42, 'XSpinBase').Text = String(SP.DEFAULT_BASE);
+    var t = S(42, 'XSpinTension'); t.Text = 'on'; t.FillRGB = SAMPLE_ON;
+    SP.KEYS.forEach(function (k) { S(42, 'XSpinO_' + k).Text = ''; });
+    paintSpin();
   };
 
   /* ---------- sample puzzles ----------
@@ -493,6 +590,9 @@
     XExplainMDW: ['Puts the Million Dollar Wedge on the Normal, Mystery and Express wheels, as on the show: a sliver of ONE MILLION between two Bankrupts. Landing in the middle is worth $500; give the player the wedge with the green token next to their name.\n\nIf that player reaches the Bonus Round still holding it, the $100,000 envelope on the Bonus Wheel becomes $1,000,000. The default is off.', 'Million Dollar Wedge'],
     XExplainPick: ['Before the Bonus Round puzzle, enter three puzzle numbers. The contestant sees their three categories and picks one, like on the show. The default is on.', 'Pick-a-Category Bonus'],
     XExplainSamples: ['The game comes with 100 sample puzzles of its own, kept apart from yours. At Load Puzzle, type S for a random one that hasn\u2019t been played yet (ST for a Toss-Up, SP for a Prize Puzzle, STTT for a Triple Toss-Up), or S7 for sample puzzle 7. In the Bonus Round, type S for three random categories.\n\nThis number is how many of them the game draws from: 1 to 100 (the default, 100, uses all of them). Enter 0 to turn them off.\n\nAdd Sample Puzzles to My List copies some into your own puzzle list so you can edit them.', 'Sample Puzzles'],
+    XExplainSpinBase: ['How long a regular spin of the wheel lasts. Pick Quick (2.5s) to keep a big class moving, Classic (3.6s) for the original slideshow, Dramatic (5.5s) or Nail-Biter (8s) to stretch the suspense, or Custom for any number from 1.5 to 15 seconds.\n\nThe spin sound stretches to fit. The default is Classic.', 'Base Spin Length'],
+    XExplainSpinTension: ['When on, the wheels with the most at stake spin longer than the base length: Mystery and Express 15% longer, the Fourth Round 25% longer, the Final Spin 75% longer and the Bonus Wheel twice as long (and those last two slow down more gradually at the end). Turn it off to spin every wheel for the base length. The default is on.', 'Build Tension'],
+    XExplainSpinWheels: ['The spin length each wheel ends up with, after Build Tension. Green times follow the base length. Click a time to set your own for that wheel (gold); type auto to go back to automatic.\n\nThe Fourth Round is the regular rounds on the fourth wheel. The Final Spin is the single spin each player takes once the Final Spin button on the board has been started.', 'Spin Length by Wheel'],
     XExplainBonusWheel: ['Adds a Bonus Wheel with 24 envelopes. In the Bonus Round, click the Bonus Wheel button at the top right of the puzzle board to spin it. Edit the prizes with Edit Bonus Prizes. The default is on.', 'Bonus Prize Wheel']
   };
   Object.keys(EXPLAIN).forEach(function (k) { App.M[k] = function () { return Dlg.msg(EXPLAIN[k][0], EXPLAIN[k][1]); }; });
@@ -614,7 +714,8 @@
   var lastLanded = '';
   var Extras = {
     init: function () {},
-    afterBoot: function () { paintTurn(); syncBonusLink(); try { paintSampleBox(); } catch (e) { } },
+    afterBoot: function () { paintTurn(); syncBonusLink(); try { paintSampleBox(); } catch (e) { } try { paintSpin(); } catch (e) { } },
+    spinPlan: spinPlan,
     samplesOn: function () { try { return samplesOn(); } catch (e) { return false; } },
     trySampleCode: trySampleCode,
     loadNextSample: loadNextSample,
@@ -623,7 +724,7 @@
     onBuild: function (s, id) {
       if (id === 2) { setTimeout(function () { try { placePlayerExtras(); paintTurn(); } catch (e) { } }, 0); }
     },
-    onShow: function (id) { if (id === 2) { paintTurn(); syncBonusLink(); } if (id === 41) WOFWheel.redraw(App.slide(41).el); },
+    onShow: function (id) { if (id === 2) { paintTurn(); syncBonusLink(); } if (id === 41) WOFWheel.redraw(App.slide(41).el); if (id === 42) paintSpin(); },
     save: function () { return null; },
     load: function () {},
     onClearBoard: function () { Rules.reset(); S(2, 'XPrizeActive').Text = ''; S(2, 'XPrizeRibbon').Visible = false; },

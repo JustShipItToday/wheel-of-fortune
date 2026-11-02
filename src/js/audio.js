@@ -5,7 +5,7 @@
   'use strict';
   var NAMES = ['LoadPuzzleChime', 'GuessLetterCorrect', 'GuessLetterWrong', 'SpinWheel', 'SolvePuzzleChime', 'TripleTossUpSolve', 'FinalSpinAlert', 'BonusCountdown', 'TossUpMusic', 'FinalSpinMusic'];
   var custom = {};        // name -> object URL
-  var player = null, muted = false;
+  var player = null, muted = false, fitTimer = null;
   var DB = 'wof-web-sounds', STORE = 'sounds';
 
   function db() {
@@ -38,12 +38,24 @@
   }
 
   function src(name) { return custom[name] || (window.WOF_SOUNDS && WOF_SOUNDS[name]) || null; }
-  function stop() { if (player) { try { player.pause(); } catch (e) { } player = null; } }
-  function play(name) {
+  function stop() { clearTimeout(fitTimer); if (player) { try { player.pause(); } catch (e) { } player = null; } }
+  /* fitMs (optional): stretch or squeeze the sound to last about this long (pitch is kept; the speed change is limited
+     to half to double), and cut it off then if it still runs on. Used so the spin sound follows the spin length. */
+  function play(name, fitMs) {
     var s = src(name);
     if (!s || muted) return;
     stop();
-    try { player = new Audio(s); var p = player.play(); if (p && p.catch) p.catch(function () { }); } catch (e) { }
+    try {
+      var a = player = new Audio(s);
+      if (fitMs > 0) {
+        a.preservesPitch = true;
+        a.addEventListener('loadedmetadata', function () {
+          if (a.duration > 0 && isFinite(a.duration)) a.playbackRate = Math.max(0.5, Math.min(2, a.duration * 1000 / fitMs));
+        });
+        fitTimer = setTimeout(function () { if (player === a) stop(); }, fitMs + 50);
+      }
+      var p = a.play(); if (p && p.catch) p.catch(function () { });
+    } catch (e) { }
   }
   function setCustom(name, file) {
     return tx('readwrite', function (st) { st.put(file, name); }).then(function () {

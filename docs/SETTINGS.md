@@ -35,6 +35,19 @@ Open **Settings** from the title screen's Set Up Puzzles page or from the top ri
 | **$5,000 Sliver** | A wedge split into two Bankrupts and $5,000. | off |
 | **$5 Wedge** | Adds a $5 wedge. | off |
 | **Claimable** | *once* removes an item from the wheel when claimed; *multiple* leaves it for others to earn. | once |
+| **Spin Length** | Opens the Spin Length screen (below). | |
+
+## Spin Length
+Open **Spin Length** from the bottom of Wheel Settings to control how long the wheel spins. The original slideshow spins for a fixed 3.6 seconds; this lets you speed it up for a big class or stretch it out for suspense.
+
+| Setting | What it does | Default |
+|---|---|---|
+| **Base Spin Length** | How long a regular spin lasts: **Quick** 2.5s, **Classic** 3.6s, **Dramatic** 5.5s, **Nail-Biter** 8s, or **Custom** (1.5 to 15 seconds). | Classic (3.6s) |
+| **Build Tension** | The wheels with more at stake spin longer than the base: Mystery and Express ×1.15, Fourth Round ×1.25, Final Spin ×1.75, Bonus Wheel ×2. The Final Spin and Bonus Wheel also slow down more gradually at the end. Off spins every wheel for the base length. | on |
+| **Spin Length by Wheel** | The length each wheel ends up with (Normal, Mystery, Express, Fourth, Final Spin, Bonus Wheel). Click a time to set your own (it turns gold); type `auto` to go back to automatic. | automatic |
+| **Reset to Defaults** | Classic, Build Tension on, no custom times. | |
+
+With the defaults the spins last 3.6s (Normal), 4.1s (Mystery, Express), 4.5s (Fourth), 6.3s (Final Spin) and 7.2s (Bonus Wheel). Longer spins make proportionally more turns, and the spin sound stretches to fit. The "Final Spin" length applies to the single spin each player takes once the Final Spin button on the board has been started; regular rounds on the fourth wheel use the Fourth Round length.
 
 ## Extra Features
 | Setting | What it does | Default |
