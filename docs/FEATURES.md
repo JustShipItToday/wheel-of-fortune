@@ -69,8 +69,11 @@ Paste one puzzle per line as `CATEGORY | puzzle text`. Separate board rows with 
 ### Save and load a game file
 The **⋯** menu in the bottom-right corner has **Save game file** and **Load game file**, so you can move a game (puzzles, scores and settings) to another computer or keep a backup. The game also **autosaves in the browser** you are using.
 
+### Spin Length
+Choose how long the wheel spins in **Settings → Wheel Settings → Spin Length**. The slideshow always spins for 3.6 seconds (**Classic**, the default); you can pick **Quick** (2.5s), **Dramatic** (5.5s), **Nail-Biter** (8s) or any custom time. With **Build Tension** on (the default), the wheels with more at stake spin longer than a regular round: Mystery and Express 15% longer, the Fourth Round 25%, the **Final Spin** 75% (6.3s) and the **Bonus Wheel** twice as long (7.2s), and those last two slow down more gradually at the end. Each wheel's time can also be set by hand. The spin sound stretches to fit. See [Settings](SETTINGS.md#spin-length) for every option.
+
 ### Share a game as a link
-Click **Share Game** on the Settings screen (or **⋯ → Share game link**), choose what goes in the link, and click **Copy link**. Anyone who opens it gets their own copy of your game: puzzles, settings, colors and rules always travel; you can also include **player names and scores**, and the **current puzzle and whose turn it is** (their game then opens on the puzzle board). They can edit anything, and if they share it they get a new link; yours never changes.
+Click **Share Game** on the Settings screen (or **⋯ → Share game link**), choose what goes in the link, and click **Copy link**. Anyone who opens it gets their own copy of your game: puzzles, settings (including Spin Length), colors and rules always travel; you can also include **player names and scores**, and the **current puzzle and whose turn it is** (their game then opens on the puzzle board). They can edit anything, and if they share it they get a new link; yours never changes.
 
 There is no server: the whole game is packed into the link itself (a game with 16 puzzles is about 4,000 characters). Opening a link asks first, keeps the visitor's own game as a backup (**⋯ → Switch to previous game**), and works on any browser. Sounds you uploaded yourself can't travel in a link; the built-in sounds are the same for everyone. A link is a snapshot, not a live session: it doesn't sync while two people play.
 

@@ -121,6 +121,8 @@ The game follows the show's rules, and tells you why when something is not allow
 
 > "You've got it! Congratulations!"
 
+> **Spin length:** a regular spin lasts the base length (3.6s by default). Change it in **Settings → Wheel Settings → Spin Length** (see [Settings](docs/SETTINGS.md#spin-length)).
+
 ---
 
 ## 🔮 Mystery Round
@@ -156,6 +158,8 @@ The game follows the show's rules, and tells you why when something is not allow
 
 > (Drum roll, then click the **?**) "And the wedge says... **TEN THOUSAND DOLLARS!**" / "...oh no. **Bankrupt.**"
 
+> **Spin length:** with Build Tension on, this wheel spins 15% longer than the base (4.1s by default). Change it in **Settings → Wheel Settings → Spin Length** (see [Settings](docs/SETTINGS.md#spin-length)).
+
 ---
 
 ## 🚂 Express Round
@@ -189,6 +193,8 @@ The game follows the show's rules, and tells you why when something is not allow
 > "Two Rs! Two thousand dollars! Now you can **hop on the Express**: keep calling letters at a thousand dollars each, but if you miss, it's **Bankrupt**. Are you riding?"
 
 > "All aboard! ...Sorry, no M's. The Express has run out of track. **Bankrupt.**"
+
+> **Spin length:** with Build Tension on, this wheel spins 15% longer than the base (4.1s by default). Change it in **Settings → Wheel Settings → Spin Length** (see [Settings](docs/SETTINGS.md#spin-length)).
 
 ---
 
@@ -233,6 +239,8 @@ In plain English: the player gets **one spin** for the whole round. Every conson
 
 > "There are three of those, and you've got *this* long to solve. The clock is running!"
 
+> **Spin length:** with Build Tension on, the Final Spin itself runs 75% longer than the base (6.3s by default) and slows down more gradually at the end, while regular rounds on the fourth wheel are 25% longer (4.5s). Change it in **Settings → Wheel Settings → Spin Length** (see [Settings](docs/SETTINGS.md#spin-length)).
+
 ---
 
 ## 💰 Bonus Round
@@ -275,6 +283,8 @@ The default prize mix is an approximation of the show's, not an official list. E
 > "Let's see what you've got! ...Here we go. You have **ten seconds**. The clock starts... **now**!"
 
 > "Time!" / "YES! You solved it! Let's see what's in your envelope..."
+
+> **Spin length:** with Build Tension on, the Bonus Wheel spins twice as long as the base (7.2s by default) and slows down gradually at the end, so the prize hangs in the balance. Change it in **Settings → Wheel Settings → Spin Length** (see [Settings](docs/SETTINGS.md#spin-length)).
 
 ---
 

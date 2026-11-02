@@ -6,6 +6,9 @@ Automatically, in the browser you are using on that computer. Use the same brows
 ## How do I share my game with someone?
 Open **Settings → Share Game** (or **⋯ → Share game link**), tick what to include, and click **Copy link**. Send the link by text, email or chat. Opening it asks them before anything changes, and they can switch back to their own game from the **⋯** menu.
 
+## Can I make the wheel spin longer (or shorter)?
+Yes. Open **Settings → Wheel Settings → Spin Length**. Pick Quick, Classic (the default 3.6 seconds), Dramatic or Nail-Biter, or type your own. With **Build Tension** on, the Final Spin and Bonus Wheel automatically spin longer than a regular round, and you can set any wheel's time by hand. These settings travel in game files and share links.
+
 ## My share link doesn't work.
 Some chat apps cut very long links. The Share window shows the link's length and warns when it is long; if a friend gets a "damaged or cut off" message, send the link another way (email works well) or use **Save game file** instead. Links also need a reasonably current browser (Chrome, Edge, Firefox or Safari from 2023 or later).
 

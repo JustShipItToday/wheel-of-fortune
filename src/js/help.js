@@ -104,7 +104,7 @@
       ],
       tips: ['Using a real wheel in the room? Click the value panel and type the amount you spun.'],
       say: ['Our category is… Food and Drink! Give it a spin!', 'Seven hundred dollars! Pick a consonant.', 'There are two Ts. That’s fourteen hundred dollars!'],
-      related: ['letters', 'scoring', 'bankrupt', 'mystery']
+      related: ['letters', 'scoring', 'bankrupt', 'mystery', 'spinlength']
     },
     {
       id: 'mystery', group: 1, icon: '🔮', title: 'Mystery Round', chip: '#8E44AD',
@@ -123,7 +123,7 @@
         'Put both wedges back with the small blue **x** next to the Mystery result box.'
       ],
       say: ['You landed on a Mystery wedge! Pick a consonant.', 'A thousand dollars each… or flip it for ten thousand, or Bankrupt. What’ll it be?'],
-      related: ['normal', 'express', 'bankrupt']
+      related: ['normal', 'express', 'bankrupt', 'spinlength']
     },
     {
       id: 'express', group: 1, icon: '🚂', title: 'Express Round', chip: '#F1C40F',
@@ -141,7 +141,7 @@
         'If the very first consonant after landing misses, the turn just passes like any other miss.'
       ],
       say: ['You hit the Express! Hop aboard? A thousand dollars a letter, but one miss and it’s Bankrupt!', 'All aboard!'],
-      related: ['normal', 'letters', 'bankrupt']
+      related: ['normal', 'letters', 'bankrupt', 'spinlength']
     },
     {
       id: 'finalspin', group: 1, icon: '🌀', title: 'Final Spin', chip: '#6C5CE7',
@@ -159,9 +159,9 @@
         'After a correct letter they get a short time to solve (the shot clock is great here).',
         'Click **FINAL SPIN** again to cancel it and go back to normal play.'
       ],
-      tips: ['There is no Bankrupt here, and a missed letter doesn’t clear the spin.', 'Bank the winner with Transfer Totals before going to the Bonus Round.'],
+      tips: ['There is no Bankrupt here, and a missed letter doesn’t clear the spin.', 'Bank the winner with Transfer Totals before going to the Bonus Round.', 'With Build Tension on, the Final Spin runs longer than a regular spin (6.3s by default). See **Spin Length**.'],
       say: ['It’s time for the Final Spin! Every consonant is worth a thousand dollars plus the spin, and vowels are free!'],
-      related: ['shotclock', 'bonus', 'scoring']
+      related: ['spinlength', 'shotclock', 'bonus', 'scoring']
     },
     {
       id: 'bonus', group: 1, icon: '💰', title: 'Bonus Round', chip: '#D4A017',
@@ -242,8 +242,8 @@
         'Click the wheel to spin. It lands on an envelope number.',
         'After the contestant solves (or time runs out), click **Reveal Prize**.'
       ],
-      tips: ['If the contestant still holds the Million Dollar Wedge, the $100,000 envelope becomes $1,000,000.', 'The default prizes are a close approximation of the show, not an official list.'],
-      related: ['bonus', 'mdw']
+      tips: ['If the contestant still holds the Million Dollar Wedge, the $100,000 envelope becomes $1,000,000.', 'The default prizes are a close approximation of the show, not an official list.', 'This wheel spins the longest (7.2s by default) so the prize hangs in the balance. Change it in **Spin Length**.'],
+      related: ['bonus', 'mdw', 'spinlength']
     },
 
     /* ---------------- Wheel spaces & items ---------------- */
@@ -351,7 +351,7 @@
       what: 'An on-board countdown from **1 to 30 seconds** to keep decisions moving.',
       use: ['Set the seconds in **Settings → Shot Clock** (it is off, "none", by default). The clock then appears on the puzzle board.'],
       play: ['Click the clock to start the countdown; click it again to reset.', 'When it hits zero the turn passes (with the turn tracker on).'],
-      related: ['finalspin', 'turntracker']
+      related: ['finalspin', 'turntracker', 'spinlength']
     },
     {
       id: 'spinlength', group: 5, icon: '🎡', title: 'Spin Length',
@@ -369,7 +369,7 @@
         ['Final Spin', '75% longer (6.3s), with a slower crawl to the stop'],
         ['Bonus Wheel', 'twice as long (7.2s), with a slower crawl to the stop']
       ],
-      tips: ['Times shown are with the Classic base. Pick Dramatic and the Bonus Wheel spins for 11 seconds.', 'The spin sound stretches or shrinks to fit the spin.', 'The settings are saved with the game, so they travel in a game file or a shared link.'],
+      tips: ['Times shown are with the Classic base. Pick Dramatic and the Bonus Wheel spins for 11 seconds.', 'The spin sound stretches or shrinks to fit the spin.', 'The settings are saved with the game, so they travel in a **game file** and in a **Share Game link** (they are part of the settings that always go in the link).'],
       related: ['finalspin', 'bonuswheel', 'normal']
     },
     {
@@ -387,7 +387,7 @@
       what: 'Your puzzles, scores and settings **save automatically in this browser** after every change.',
       play: [
         'Move a game to another computer: corner menu **⋯ → Save game file**, then **Load game file** on the other machine.',
-        'Send a game to a friend: **Settings → Share Game** copies a link with your puzzles and settings (scores optional).',
+        'Send a game to a friend: **Settings → Share Game** copies a link with your puzzles and settings, including Spin Length (scores optional).',
         'Full screen: corner menu **⋯ → Full screen**, or F11.'
       ],
       tips: ['The **⋯** menu sits in the bottom-right corner and appears when you move the mouse.', 'Don’t use the browser’s Back button mid-game; use the on-screen buttons.', 'On a video call, share this browser tab.'],

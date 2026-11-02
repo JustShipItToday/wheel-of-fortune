@@ -61,7 +61,7 @@ With the defaults the spins last 3.6s (Normal), 4.1s (Mystery, Express), 4.5s (F
 | **Game Help** | Opens the in-game Help screen (also F1, or the ? on the puzzle board). | |
 | **Import Puzzles from Text** | Adds many puzzles at once. | |
 | **Save/Load game file** | Moves a game between computers. | |
-| **Share Game** | On the Settings screen: copies a link that opens your game for anyone, with optional scores and current puzzle. | |
+| **Share Game** | On the Settings screen: copies a link that opens your game for anyone, with optional scores and current puzzle. Your settings, including Spin Length, always go in the link. | |
 
 ## Players
 Use the **+ / −** buttons on the puzzle board to switch between 2, 3 and 4 players. Click a name to edit it.
