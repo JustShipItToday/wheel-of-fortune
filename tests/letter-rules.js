@@ -21,7 +21,7 @@ module.exports = async function (t) {
   }
   async function spin(slide, r) {
     await t.eval(`App.show(${slide}); Math.random = () => ${r}/3600 + 1e-9`);
-    await t.click('TransparentWheelOverlay', slide); await t.wait(3800);
+    await t.click('TransparentWheelOverlay', slide); await t.page.waitForFunction('!App.busy', null, { timeout: 30000, polling: 50 });   // spin length varies by wheel (Spin Length setting)
     const v = await t.text('WheelValue', slide);
     await t.eval('App.show(2)'); await t.wait(80);
     return v;

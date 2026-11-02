@@ -1,4 +1,6 @@
 // puzzles via import, final spin, bonus round with pick-a-category + bonus wheel, prize puzzle, MDW, mystery, express
+// spin lengths vary by wheel (Settings > Wheel Settings > Spin Length), so wait for the page to finish rather than a fixed time
+const settle = (t) => t.page.waitForFunction('!App.busy', null, { timeout: 30000, polling: 50 });
 module.exports = async function (t) {
   await t.eval('App.show(40)');
   await t.click('XImportPuzzles', 40);
@@ -29,7 +31,7 @@ module.exports = async function (t) {
   t.log('mystery round visible', await t.eval("PPT.sh(2,'Mystery Round').Visible"));
   await t.click('LeftTab', 2); await t.answer('3');
   await t.eval('App.show(4); Math.random = () => 1125/3600');
-  await t.click('TransparentWheelOverlay', 4); await t.wait(3800);
+  await t.click('TransparentWheelOverlay', 4); await settle(t);
   t.log('mystery landed', await t.text('WheelValue', 4), 'spun', await t.text('SpunWheelValue', 2));
   await t.eval('Math.random = () => 0.75');
   await t.click('Oval 39', 4); await t.wait(300);
@@ -39,7 +41,7 @@ module.exports = async function (t) {
   await t.eval('App.show(2)');
   await t.click('Mystery Round', 2);
   await t.eval('App.show(5); Math.random = () => 3075/3600');
-  await t.click('TransparentWheelOverlay', 5); await t.wait(3800);
+  await t.click('TransparentWheelOverlay', 5); await settle(t);
   t.log('express landed', await t.text('WheelValue', 5));
   await t.shot('express');
   // fourth round + final spin
@@ -51,7 +53,7 @@ module.exports = async function (t) {
   await t.shot('finalspin-banner');
   await t.eval('Math.random = () => 75/3600');   // bankrupt first -> respin with same random... use sequence
   await t.eval('(function(){ var seq=[75/3600, 1425/3600]; var i=0; Math.random=function(){ return seq[Math.min(i++,seq.length-1)]; }; })()');
-  await t.click('FinalSpinBanner', 2); await t.wait(3900);
+  await t.click('FinalSpinBanner', 2); await settle(t);
   t.log('final landed', await t.text('WheelValue', 6), 'panel', await t.text('ValuePanel', 2));
   await t.click('BackText', 6); await t.wait(100);
   await t.click('Letter3', 2);
@@ -81,7 +83,7 @@ module.exports = async function (t) {
   await t.click('XBonusWheelLink', 2);
   t.log('slide', await t.eval('App.current'));
   await t.eval('Math.random = () => (23-12)*150/3600 + 0.0001');
-  await t.click('TransparentWheelOverlay', 41); await t.wait(3800);
+  await t.click('TransparentWheelOverlay', 41); await settle(t);
   t.log('bw', await t.text('WheelValue', 41));
   await t.click('XRevealPrize', 41);
   t.log('prize', await t.text('WheelValue', 41));

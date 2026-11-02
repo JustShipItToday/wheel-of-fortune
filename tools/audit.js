@@ -7,7 +7,7 @@ const { chromium } = require('playwright-core');
   const res = await p.evaluate(async () => {
     const out = { bad: [], over: [] };
     const BAD = /gamesbytim|PowerPoint|macro|Important Notice|Before you start|projects|family|Enable|original art|Rusnak.*template/i;
-    const ids = []; for (let i = 1; i <= 41; i++) { try { App.slide(i); ids.push(i); } catch (e) { } }
+    const ids = []; for (let i = 1; i <= 42; i++) { try { App.slide(i); ids.push(i); } catch (e) { } }
     for (const id of ids) {
       App.show(id); await new Promise(r => setTimeout(r, 120));
       const scr = document.querySelector('.screen[data-slide="' + id + '"]'); if (!scr) continue;

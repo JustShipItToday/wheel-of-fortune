@@ -5,6 +5,8 @@ The round button on the puzzle board (it starts as **Normal Round**) cycles thro
 ## Normal Round
 The standard game. Spin the wheel, call a consonant, and score the spun value for each match; buy vowels; solve to win the round. Wedges on the normal wheel include dollar amounts, **Bankrupt**, and **Lose a Turn**. The range of dollar values is a setting (default $500–$900).
 
+> **Spin length:** a regular spin lasts the base length (3.6s by default). Change it in **Settings → Wheel Settings → Spin Length** (see [Settings](SETTINGS.md#spin-length)).
+
 ## Toss-Up
 Load a puzzle with **T** after the number (`2T`).
 - You are asked how much the Toss-Up is worth (default $1,000).
@@ -25,14 +27,20 @@ The Mystery wheel has two **Mystery wedges**. If a player lands on one and calls
 
 That Mystery wedge disappears, and the other becomes a standard $1,000 space.
 
+> **Spin length:** with Build Tension on, this wheel spins 15% longer than the base (4.1s by default). Change it in **Settings → Wheel Settings → Spin Length** (see [Settings](SETTINGS.md#spin-length)).
+
 ## Express Round
 The Express wheel has an **Express wedge**. If a player lands on it and calls a correct letter (worth $1,000 each), they may **hop aboard the Express**: they keep calling letters at $1,000 each, but an incorrect letter means **Bankrupt**. High risk, high reward.
+
+> **Spin length:** with Build Tension on, this wheel spins 15% longer than the base (4.1s by default). Change it in **Settings → Wheel Settings → Spin Length** (see [Settings](SETTINGS.md#spin-length)).
 
 ## Final Spin
 The last wheel of the main game; all wheel items are disabled. Rounds continue on this wheel until the host starts the **Final Spin** with the Final Spin button on the board, then follows the banner:
 - On your turn, call any letter.
 - Vowels are free; consonants add $1,000 plus the spin.
 - If the letter is in the puzzle, the player has limited time to solve.
+
+> **Spin length:** with Build Tension on, the Final Spin itself runs 75% longer than the base (6.3s by default) and slows down more gradually at the end, while regular rounds on the fourth wheel are 25% longer (4.5s). Change it in **Settings → Wheel Settings → Spin Length** (see [Settings](SETTINGS.md#spin-length)).
 
 ## Bonus Round
 Played by the winner of the main game.
@@ -41,6 +49,8 @@ Played by the winner of the main game.
 - A **10-second** countdown runs for the solve.
 - With **Pick-a-Category Bonus** on, you enter three puzzle numbers and the contestant picks one of the three categories first.
 - With **Bonus Wheel** on, spin the 24-envelope wheel for the prize. See [Features](FEATURES.md).
+
+> **Spin length:** with Build Tension on, the Bonus Wheel spins twice as long as the base (7.2s by default) and slows down gradually at the end, so the prize hangs in the balance. Change it in **Settings → Wheel Settings → Spin Length** (see [Settings](SETTINGS.md#spin-length)).
 
 ## Prize Puzzle *(new in this edition)*
 Load with **P** (`4P`). The first time, you name the prize and its dollar value. When the puzzle is solved, you choose who solved it, and the prize value is added to **that player's round score**. Enter $0 to award the prize without adding money.

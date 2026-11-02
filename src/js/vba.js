@@ -22,7 +22,7 @@
   async function MsgBox(text, title) { await Dlg.msg(text, title); }
   async function YesNo(text, title, defaultNo) { return await Dlg.confirm(text, title, { defaultNo: !!defaultNo }); }
   async function OkCancel(text, title) { return await Dlg.confirm(text, title, { yes: 'OK', no: 'Cancel' }); }
-  function Play(name) { if (window.WOFAudio) WOFAudio.play(name); }
+  function Play(name, fitMs) { if (window.WOFAudio) WOFAudio.play(name, fitMs); }
   function GotoSlide(n) { App.show(n); }
   function GameName() { return S(9, 'GameName').Text; }
   window.VBA = { S: S, sleep: sleep };
@@ -983,11 +983,13 @@
     if (spun != null) S(2, 'SpunWheelValue').Text = spun;
     if (window.Extras && Extras.onLanded) Extras.onLanded(landed, rand, sl);
     setValuePanelDisplay();
-    Play('SpinWheel');
-    // the slideshow's animation: wheel spins 1800 + rand/10 degrees over 3.6 s; the result box and Back button appear at the end
+    // the slideshow's animation: wheel spins 1800 + rand/10 degrees over 3.6 s; the result box and Back button appear at the end.
+    // The web edition's Spin Length setting can change the 3.6 s (see Extras.spinPlan).
+    var plan = window.Extras && Extras.spinPlan ? Extras.spinPlan(sl, isFinalSpin) : { ms: 3600, power: 2 };
+    Play('SpinWheel', plan.ms);
     var hide = ['WheelValue', 'BackText', 'BackOval'].map(function (n) { return S(sl, n); });
     hide.forEach(function (s) { s.el.style.visibility = 'hidden'; });
-    await WOFWheel.spin(App.slide(sl).el, rand / 10, 3600);
+    await WOFWheel.spin(App.slide(sl).el, rand / 10, plan.ms, plan);
     hide.forEach(function (s) { s.el.style.visibility = ''; });
     if (window.Extras && Extras.afterSpin) await Extras.afterSpin(landed, rand, sl);
   };

@@ -83,6 +83,46 @@
     return '';
   }
 
+  /* ---------- spin length (web edition extra) ----------
+     The slideshow spins the wheel for a fixed 3.6 s. Here the host sets a base length, and with "Build Tension" on the
+     high-stakes wheels spin longer than a regular round. Any wheel can also be given its own length. */
+  var SPIN = {
+    DEFAULT_BASE: 3.6,      // seconds: the slideshow's own spin
+    MIN: 1.5, MAX: 30,      // limits for any single wheel
+    BASE_MAX: 15,           // limit for the base length
+    PRESETS: [['Quick', 2.5], ['Classic', 3.6], ['Dramatic', 5.5], ['Nail-Biter', 8]],
+    KEYS: ['normal', 'mystery', 'express', 'fourth', 'final', 'bonus'],
+    LABELS: { normal: 'Normal Round', mystery: 'Mystery Round', express: 'Express Round', fourth: 'Fourth Round', final: 'Final Spin', bonus: 'Bonus Wheel' },
+    FACTOR: { normal: 1, mystery: 1.15, express: 1.15, fourth: 1.25, final: 1.75, bonus: 2 }   // Build Tension multipliers
+  };
+  /* which wheel a spin is: slide 3 Normal, 4 Mystery, 5 Express, 6 Fourth, 41 Bonus Wheel; finalSpin = the single Final Spin turn */
+  function spinKey(slide, finalSpin) {
+    if (slide === 41) return 'bonus';
+    if (finalSpin) return 'final';
+    return slide === 4 ? 'mystery' : slide === 5 ? 'express' : slide === 6 ? 'fourth' : 'normal';
+  }
+  /* "4", "4.5", "4,5", "4.5s", "4 seconds" -> seconds to a tenth, or null if unreadable or outside lo..hi */
+  function parseSeconds(text, lo, hi) {
+    var m = /^\s*(\d+(?:[.,]\d+)?)\s*(?:s|sec|secs|second|seconds)?\s*$/i.exec(String(text == null ? '' : text));
+    if (!m) return null;
+    var v = Math.round(parseFloat(m[1].replace(',', '.')) * 10) / 10;
+    return (v >= lo && v <= hi) ? v : null;
+  }
+  /* cfg: {base: seconds, tension: bool, over: {key: seconds | null}} -> how long that wheel spins, in seconds */
+  function spinSeconds(key, cfg) {
+    var o = cfg.over && cfg.over[key], v;
+    if (o > 0) v = o;
+    else v = (cfg.base > 0 ? cfg.base : SPIN.DEFAULT_BASE) * (cfg.tension ? (SPIN.FACTOR[key] || 1) : 1);
+    return Math.max(SPIN.MIN, Math.min(SPIN.MAX, Math.round(v * 10) / 10));
+  }
+  /* deceleration exponent (2 = the slideshow's "decelerate"): the two biggest moments crawl to a stop for longer */
+  function spinPower(key, tension) { return tension && (key === 'final' || key === 'bonus') ? 2.3 : 2; }
+  function spinPresetName(base) {
+    for (var i = 0; i < SPIN.PRESETS.length; i++) if (Math.abs(SPIN.PRESETS[i][1] - base) < 0.001) return SPIN.PRESETS[i][0];
+    return '';
+  }
+  function fmtSeconds(n) { return (Math.round(n * 10) / 10) + 's'; }
+
   /* ---------- puzzle helpers ---------- */
   var ROW_START = [1, 13, 27, 41], ROW_END = [12, 26, 40, 52];
   function emptyPuzzle() { var c = []; for (var i = 0; i < 52; i++) c.push(''); return { c: c, cat: '' }; }
@@ -165,6 +205,7 @@
   root.WOFCore = {
     GREEN: GREEN, WHITE: WHITE, BLUE: BLUE, fmt: fmt, money: money, parseNum: parseNum, CH: CH,
     isLetter: isLetter, isVowel: isVowel, lettersMatch: lettersMatch, selLetter: selLetter, VOWEL_SEL: VOWEL_SEL, CONS_SEL: CONS_SEL,
+    SPIN: SPIN, spinKey: spinKey, parseSeconds: parseSeconds, spinSeconds: spinSeconds, spinPower: spinPower, spinPresetName: spinPresetName, fmtSeconds: fmtSeconds,
     landing: landing, spunFromWheel: spunFromWheel, EXAMPLE: EXAMPLE, ROW_START: ROW_START, ROW_END: ROW_END,
     emptyPuzzle: emptyPuzzle, puzzleOccupied: puzzleOccupied, scribe: scribe, properties: properties, CATEGORIES: CATEGORIES, bankers: bankers
   };

@@ -177,16 +177,20 @@
     redraw(screen);
   }
 
-  /* spin the wheel group to an absolute final angle (deg, clockwise), at least five full turns */
-  function spin(screen, finalDeg, ms) {
+  /* spin the wheel group to an absolute final angle (deg, clockwise) over ms milliseconds.
+     The slideshow's 3.6 s spin makes five full turns; a longer or shorter spin makes proportionally more or fewer
+     (never fewer than two), so the opening speed stays about the same instead of crawling or blurring.
+     opts.power is the deceleration exponent: 2 is PowerPoint's "decelerate 100%", higher crawls to a stop for longer. */
+  function spin(screen, finalDeg, ms, opts) {
     var g = screen.querySelector('.grp[data-name="TheWheel"]');
+    var power = (opts && opts.power > 1) ? opts.power : 2, turns = Math.max(2, Math.round(5 * ms / 3600));
     var start = g._angle || 0, startMod = ((start % 360) + 360) % 360;
-    var delta = 1800 + (((finalDeg - startMod) % 360) + 360) % 360;
+    var delta = 360 * turns + (((finalDeg - startMod) % 360) + 360) % 360;
     var end = start + delta, t0 = null;
     return new Promise(function (resolve) {
       function frame(ts) {
         if (t0 == null) t0 = ts;
-        var t = Math.min(1, (ts - t0) / ms), e = 1 - (1 - t) * (1 - t);   // PowerPoint "decelerate 100%"
+        var t = Math.min(1, (ts - t0) / ms), e = 1 - Math.pow(1 - t, power);
         var a = start + delta * e;
         g.style.transform = 'rotate(' + a + 'deg)';
         if (t < 1) requestAnimationFrame(frame); else { g._angle = end % 360; g.style.transform = 'rotate(' + g._angle + 'deg)'; resolve(); }

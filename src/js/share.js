@@ -96,7 +96,7 @@
     var intro = document.createElement('div');
     intro.textContent = 'Copy a link that opens your game on anyone’s computer. Choose what goes in it:';
     node.appendChild(intro);
-    var r0 = row('Puzzles, settings, colors and rules', 'Always included.', true, true);
+    var r0 = row('Puzzles, settings, colors and rules', 'Always included, spin lengths too.', true, true);
     var r1 = row('Player names and scores', 'Names, round and total scores, and who holds a Wild Card or Gift Tag.', false);
     var r2 = row('Current puzzle and whose turn', 'The board exactly as it is now, and the turn tracker.', false);
     [r0, r1, r2].forEach(function (r) { node.appendChild(r.el); });
@@ -138,7 +138,7 @@
       try { data = validate(await unpack(raw)); }
       catch (e) { await Dlg.msg('That share link looks damaged or cut off (some apps shorten long links). Ask for it again, or ask for a saved game file instead.', 'Shared Game'); return; }
       var own = false; try { own = !!localStorage.getItem(Persist.KEY); } catch (e) { }
-      var has = ['Puzzles, settings and colors'].concat(data.sh.sc ? ['player names and scores'] : [], data.sh.bd ? ['the board and whose turn it is'] : []);
+      var has = ['Puzzles, settings (including spin length) and colors'].concat(data.sh.sc ? ['player names and scores'] : [], data.sh.bd ? ['the board and whose turn it is'] : []);
       var ok = await Dlg.confirm('This is someone else’s game.\n\nIt includes: ' + has.join(', ').replace(/, ([^,]*)$/, ' and $1') + '.\n\n' +
         (own ? 'Opening it replaces the game in this browser. Your own game is kept, and you can switch back from the ⋯ menu.\n\n' : '') +
         'You can edit it freely. If you share it, you’ll get a new link and the original stays unchanged.', 'Open Shared Game', { yes: 'Open it', no: 'Not now' });

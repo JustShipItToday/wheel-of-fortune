@@ -16,6 +16,7 @@ Developed by **Avi Lindenboim**. Based on **Wheel of Fortune for PowerPoint** by
 - **100 built-in sample puzzles**: type `S` at Load Puzzle for a random one (no setup needed), kept separate from your own puzzles.
 - **In-game Help**: a page for every round, puzzle type, wheel space and feature, explaining what it is, how to set it up and how to play it. Open it from the title screen, Settings, the **?** on the puzzle board, or press **F1**.
 - Autosave in your browser, plus save/load of a game file to move a game to another computer.
+- **Spin Length**: choose how long the wheel spins (Quick, Classic, Dramatic, Nail-Biter or your own), with optional extra tension that makes the Final Spin and Bonus Wheel spin longer.
 - **Share a game as a link**: copy one link with your puzzles, settings and (optionally) scores and the current puzzle, and a friend can open, edit and re-share it. No server or account needed.
 
 ## Quick start
